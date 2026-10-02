@@ -8,6 +8,8 @@ import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.View
 import android.view.animation.LinearInterpolator
+import kotlin.math.PI
+import kotlin.math.sin
 
 /**
  * Quirky minimal running dots animation view for BloomAir connection status.
@@ -29,7 +31,7 @@ class RunningDotsView @JvmOverloads constructor(
     private var animator: ValueAnimator? = null
 
     init {
-        startAnimation()
+        startDotAnimation()
     }
 
     fun setDotColor(color: Int) {
@@ -37,7 +39,7 @@ class RunningDotsView @JvmOverloads constructor(
         invalidate()
     }
 
-    fun startAnimation() {
+    fun startDotAnimation() {
         if (animator?.isRunning == true) return
         animator = ValueAnimator.ofFloat(0f, 1f).apply {
             duration = 1200L
@@ -51,18 +53,18 @@ class RunningDotsView @JvmOverloads constructor(
         }
     }
 
-    fun stopAnimation() {
+    fun stopDotAnimation() {
         animator?.cancel()
         animator = null
     }
 
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
-        startAnimation()
+        startDotAnimation()
     }
 
     override fun onDetachedFromWindow() {
-        stopAnimation()
+        stopDotAnimation()
         super.onDetachedFromWindow()
     }
 
@@ -74,7 +76,7 @@ class RunningDotsView @JvmOverloads constructor(
         if (w <= 0 || h <= 0) return
 
         val centerY = h / 2f
-        val dotRadius = Math.min(w, h) / 7f
+        val dotRadius = minOf(w, h) / 7f
         val totalSpacing = w - (dotCount * dotRadius * 2f)
         val gap = totalSpacing / (dotCount + 1)
 
@@ -84,7 +86,7 @@ class RunningDotsView @JvmOverloads constructor(
             // Calculate phase offset for each dot (wave effect)
             val phase = (progress + (i.toFloat() / dotCount)) % 1f
             // Sine wave scale between 0.4 and 1.2
-            val scale = 0.4f + 0.8f * Math.sin(phase * Math.PI).toFloat().coerceAtLeast(0f)
+            val scale = 0.4f + 0.8f * sin(phase * PI).toFloat().coerceAtLeast(0f)
             // Alpha pulse between 60 and 255
             val alpha = (60 + (195 * scale)).toInt().coerceIn(0, 255)
 
