@@ -62,27 +62,6 @@ class H264Decoder(private val surface: Surface) {
     private var frameCount = 0L
     private var lastFpsTs  = System.currentTimeMillis()
 
-    /**
-     * PTS → wall-clock anchor for vsync-aligned rendering.
-     *
-     * On the first output frame we record (firstPtsUs, firstWallNs). Every subsequent
-     * frame's render time is computed as:
-     *   renderNs = firstWallNs + (bufferPtsUs - firstPtsUs) * 1_000
-     *
-     * This converts the encoder's presentation timestamps directly into absolute
-     * System.nanoTime() values. SurfaceFlinger then presents the frame at exactly
-     * that nanosecond, aligning it to the nearest preceding VSYNC. The result is that
-     * display frame timing mirrors the encoder's inter-frame spacing regardless of
-     * when WiFi packets arrived — smoothing out WiFi jitter at the display level.
-     *
-     * If we fall more than MAX_RENDER_AHEAD_NS (half a frame) behind real-time we
-     * reset the anchor so the decoder catches up rather than drifting ever further.
-     */
-    private var anchorPtsUs  = Long.MIN_VALUE  // µs, from MediaCodec BufferInfo
-    private var anchorWallNs = 0L              // ns, from System.nanoTime()
-    private val MAX_RENDER_AHEAD_NS  = 50_000_000L   // 50 ms — don't schedule too far ahead
-    private val MAX_RENDER_BEHIND_NS = 33_400_000L   // 2 frames @ 60 fps — reset if this far behind
-
     // Periodic drain Runnable — runs every DRAIN_INTERVAL_MS on the codec thread.
     // This ensures decoded frames reach SurfaceFlinger promptly even when the input
     // rate is lower than the decoder's pipeline depth.
@@ -169,8 +148,6 @@ class H264Decoder(private val surface: Surface) {
             currentHeight   = height
             currentMimeType = mimeType
             isConfigured    = true
-            anchorPtsUs     = Long.MIN_VALUE   // reset render timeline on new session
-            anchorWallNs    = 0L
             Log.i(tag, "Decoder started [$mimeType ${width}x${height}]")
         } catch (e: Exception) {
             Log.e(tag, "initSync failed ($mimeType ${width}x${height}): ${e.message}")
@@ -219,67 +196,14 @@ class H264Decoder(private val surface: Surface) {
         val info = MediaCodec.BufferInfo()
         var idx  = c.dequeueOutputBuffer(info, 0L)
         while (idx >= 0) {
-            scheduleRender(c, idx, info)
+            // render immediately at next VSYNC — safe, zero-copy, no buffer exhaustion
+            c.releaseOutputBuffer(idx, true)
             updateFps()
             idx = c.dequeueOutputBuffer(info, 0L)
         }
     }
 
-    /**
-     * Release one output buffer to SurfaceFlinger with a PTS-derived wall-clock timestamp.
-     *
-     * SurfaceFlinger interprets the timestamp as: "present this buffer at the VSYNC that
-     * falls on or after this nanosecond". Passing System.nanoTime() means "present at the
-     * very next VSYNC", which is identical to releaseOutputBuffer(idx, true) but allows
-     * the compositor to batch more efficiently.
-     *
-     * By deriving the timestamp from the stream PTS we give each frame its exact
-     * inter-frame spacing from the encoder, smoothing out WiFi packet-arrival jitter.
-     */
-    private fun scheduleRender(c: MediaCodec, idx: Int, info: MediaCodec.BufferInfo) {
-        val pts = info.presentationTimeUs
-        if (pts <= 0) {
-            // No valid PTS — render immediately
-            c.releaseOutputBuffer(idx, true)
-            return
-        }
-
-        val nowNs = System.nanoTime()
-
-        if (anchorPtsUs == Long.MIN_VALUE) {
-            // First frame: anchor the timeline to "right now"
-            anchorPtsUs  = pts
-            anchorWallNs = nowNs
-        }
-
-        // Map PTS offset (µs) → absolute wall-clock render time (ns)
-        val ptsDeltaNs  = (pts - anchorPtsUs) * 1_000L
-        val renderNs    = anchorWallNs + ptsDeltaNs
-        val aheadNs     = renderNs - nowNs
-
-        when {
-            aheadNs in 1L..MAX_RENDER_AHEAD_NS -> {
-                // On-time: schedule for exact PTS-derived instant
-                c.releaseOutputBuffer(idx, renderNs)
-            }
-            aheadNs < -MAX_RENDER_BEHIND_NS -> {
-                // Too far behind real-time — reset anchor and render immediately,
-                // so the next frame re-anchors fresh rather than staying perpetually late
-                Log.d(tag, "Render anchor reset (${aheadNs / 1_000_000} ms behind)")
-                anchorPtsUs  = pts
-                anchorWallNs = nowNs
-                c.releaseOutputBuffer(idx, true)
-            }
-            else -> {
-                // Slightly late or borderline — render immediately without anchor reset
-                c.releaseOutputBuffer(idx, true)
-            }
-        }
-    }
-
     private fun releaseSync() {
-        anchorPtsUs  = Long.MIN_VALUE
-        anchorWallNs = 0L
         try { codec?.stop(); codec?.release() }
         catch (e: Exception) { Log.e(tag, "releaseSync: ${e.message}") }
         finally { codec = null; isConfigured = false }
