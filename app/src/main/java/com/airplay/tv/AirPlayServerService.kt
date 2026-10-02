@@ -145,17 +145,22 @@ class AirPlayServerService : Service(), RaopCallbackHandler, LogListener {
         bytes.joinToString("") { "%02X".format(it) }
 
     fun attachSurface(surface: Surface) {
+        // Release old decoder before creating new one (posts to codec thread internally)
+        val old = videoDecoder
+        videoDecoder = null
+        old?.release()
+
         currentSurface = surface
-        videoDecoder?.release()
         videoDecoder = H264Decoder(surface).apply {
             initialize(1920, 1080)
         }
     }
 
     fun detachSurface() {
-        videoDecoder?.release()
+        val old = videoDecoder
         videoDecoder = null
         currentSurface = null
+        old?.release()
     }
 
     fun getFps(): Int = videoDecoder?.currentFps ?: 0
