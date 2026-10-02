@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:visibility="gone" />
+        android:visibility="visible" />
 
     <!-- Minimal TV Front Dashboard Overlay -->
     <LinearLayout
@@ -165,9 +165,15 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/ubuntu_medium"
-                    android:text="Waiting for connection..."
+                    android:text="Waiting for connection"
                     android:textColor="@color/accent_sage"
                     android:textSize="13sp" />
+
+                <com.airplay.tv.ui.RunningDotsView
+                    android:id="@+id/runningDotsView"
+                    android:layout_width="36dp"
+                    android:layout_height="14dp"
+                    android:layout_marginStart="8dp" />
             </LinearLayout>
         </LinearLayout>
 

@@ -145,9 +145,13 @@ class MainActivity : AppCompatActivity(), SurfaceHolder.Callback {
                     if (deviceName != null) {
                         binding.txtSenderDevice.text = "Connected: $deviceName"
                         binding.txtSenderDevice.setTextColor(getColor(R.color.accent_sage))
+                        binding.runningDotsView.visibility = View.GONE
+                        binding.runningDotsView.stopAnimation()
                     } else {
-                        binding.txtSenderDevice.text = "Waiting for connection..."
+                        binding.txtSenderDevice.text = "Waiting for connection"
                         binding.txtSenderDevice.setTextColor(getColor(R.color.text_muted))
+                        binding.runningDotsView.visibility = View.VISIBLE
+                        binding.runningDotsView.startAnimation()
                     }
                 }
             }
