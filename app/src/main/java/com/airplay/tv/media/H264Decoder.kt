@@ -11,66 +11,71 @@ import android.view.Surface
 /**
  * Ultra-Low Latency H.264 / H.265 Hardware Decoder.
  *
- * Design:
- *  - A dedicated HandlerThread ("BloomAir-Decoder") serialises every MediaCodec call.
- *    `decodeNalUnit()` is safe to call from any thread (including the C++ network thread)
- *    because it just copies data and posts a Runnable — it never blocks.
- *  - Synchronous MediaCodec API (no Callback mode). Each posted Runnable:
- *      1. dequeueInputBuffer(5 ms) – feeds one NAL unit
- *      2. drains all pending output buffers with dequeueOutputBuffer(0)
- *    This is intentionally simple and avoids the async-callback "lost slot" deadlock where
- *    onInputBufferAvailable fires while the NAL queue is empty and the slot is never reclaimed.
- *  - KEY_COLOR_FORMAT is NOT set when outputting to a Surface; the hardware codec negotiates
- *    the correct format with SurfaceFlinger automatically.
- *  - KEY_LOW_LATENCY = 1 disables the hardware reorder buffer (API 30+).
+ * Architecture:
+ *  - A dedicated HandlerThread ("BloomAir-Decoder") serialises every single MediaCodec
+ *    operation including the isConfigured check, initSync, and decodeSync.
+ *    This is critical: checking isConfigured on the calling thread (the C++ network thread)
+ *    and posting initSync separately created a TOCTOU race where multiple initSync calls
+ *    were queued before any completed, causing each SPS/PPS/IDR to be sent to a fresh
+ *    empty codec that had never seen the prior parameter sets → macroblock artifacts.
+ *  - decodeNalUnit() copies NAL bytes and posts a single Runnable. Inside that Runnable,
+ *    running on codecThread, isConfigured is authoritative with no race window.
+ *  - MediaCodec synchronous API. No Callback mode (async mode causes a "lost input slot"
+ *    deadlock when onInputBufferAvailable fires while no NAL is queued).
+ *  - KEY_COLOR_FORMAT is intentionally NOT set; for Surface output the HAL negotiates
+ *    the correct format with SurfaceFlinger. Setting it explicitly causes OMX errors on
+ *    MStar/Amlogic TV chips.
+ *  - KEY_LOW_LATENCY = 1 disables the decoder's internal display reorder buffer (API 30+).
  */
 class H264Decoder(private val surface: Surface) {
 
     private val tag = "H264Decoder"
 
-    // Accessed only from codecThread
+    // All fields below are accessed ONLY from codecThread (except currentFps which is @Volatile)
     private var codec: MediaCodec? = null
-    @Volatile private var isConfigured = false
+    private var isConfigured = false          // NOT volatile — only read/written on codecThread
 
     private var currentMimeType = MediaFormat.MIMETYPE_VIDEO_AVC
-    private var currentWidth  = 1920
-    private var currentHeight = 1080
+    private var currentWidth    = 1920
+    private var currentHeight   = 1080
 
-    // All MediaCodec work runs on this thread
+    // Dedicated high-priority thread for all MediaCodec calls
     private val codecThread = HandlerThread(
         "BloomAir-Decoder", android.os.Process.THREAD_PRIORITY_URGENT_DISPLAY
     ).also { it.start() }
     private val codecHandler = Handler(codecThread.looper)
 
-    // FPS telemetry (written on codecThread, read from any thread)
     @Volatile var currentFps: Int = 0
         private set
-    private var frameCount = 0L
-    private var lastFpsTs  = System.currentTimeMillis()
+    private var frameCount  = 0L
+    private var lastFpsTs   = System.currentTimeMillis()
 
     // -------------------------------------------------------------------------
-    // Public API – all safe to call from any thread
+    // Public API — safe to call from any thread
     // -------------------------------------------------------------------------
 
+    /**
+     * Ensure the decoder is initialised for the given dimensions / codec.
+     * The actual init is posted to codecThread so it executes after any in-progress decode.
+     */
     fun initialize(
-        width: Int = 1920,
-        height: Int = 1080,
+        width: Int    = 1920,
+        height: Int   = 1080,
         mimeType: String = MediaFormat.MIMETYPE_VIDEO_AVC
     ) {
         val w = if (width  > 0) width  else 1920
         val h = if (height > 0) height else 1080
-
-        // Skip if already running with the same config
-        if (isConfigured && currentWidth == w && currentHeight == h &&
-            currentMimeType == mimeType && codec != null) return
-
-        codecHandler.post { initSync(w, h, mimeType) }
+        // Post unconditionally; idempotency is checked inside on the codec thread
+        codecHandler.post { initIfNeeded(w, h, mimeType) }
     }
 
     /**
-     * Submit one NAL unit for decoding. Returns immediately; decoding happens on codecThread.
-     * Data is copied before the native buffer is released, so this is safe to call from JNI
-     * callbacks.
+     * Submit one NAL unit. Safe to call from any thread.
+     * Data is copied immediately so the native buffer can be recycled after return.
+     *
+     * IMPORTANT: The mimeType check AND the decode call happen inside the same posted Runnable,
+     * ensuring they execute atomically on codecThread. This prevents the race where
+     * isConfigured is checked on the caller thread while initSync is still pending.
      */
     fun decodeNalUnit(
         nalData: ByteArray,
@@ -82,92 +87,112 @@ class H264Decoder(private val surface: Surface) {
         val targetMime = if (isH265) MediaFormat.MIMETYPE_VIDEO_HEVC
                          else        MediaFormat.MIMETYPE_VIDEO_AVC
 
-        // Re-initialise on mime-type change (posted, async, safe)
-        if (!isConfigured || currentMimeType != targetMime) {
-            initialize(currentWidth, currentHeight, targetMime)
+        // Copy before returning — native may reuse its buffer immediately
+        val copy = nalData.copyOfRange(offset, offset + length)
+
+        // Single atomic post: check + (re-)init if needed + decode, all on codecThread
+        codecHandler.post {
+            // isConfigured here is authoritative — no race window
+            if (!isConfigured || currentMimeType != targetMime) {
+                initSync(currentWidth, currentHeight, targetMime)
+            }
+            if (isConfigured) {
+                decodeSync(copy, ptsUs)
+            }
         }
-
-        // Copy payload – native buffer may be reused immediately after we return
-        val copy = if (offset == 0 && length == nalData.size) nalData.copyOf()
-                   else nalData.copyOfRange(offset, offset + length)
-
-        codecHandler.post { decodeSync(copy, ptsUs) }
     }
 
     fun release() {
         codecHandler.post { releaseSync() }
         codecThread.quitSafely()
-        isConfigured = false
     }
 
     // -------------------------------------------------------------------------
-    // Private – runs exclusively on codecThread
+    // Private — runs exclusively on codecThread
     // -------------------------------------------------------------------------
+
+    /** Idempotent: skips if specs already match the running decoder. */
+    private fun initIfNeeded(width: Int, height: Int, mimeType: String) {
+        if (isConfigured &&
+            currentWidth  == width  &&
+            currentHeight == height &&
+            currentMimeType == mimeType &&
+            codec != null) return
+        initSync(width, height, mimeType)
+    }
 
     private fun initSync(width: Int, height: Int, mimeType: String) {
         releaseSync()
-
         try {
             val format = MediaFormat.createVideoFormat(mimeType, width, height).apply {
-                // Disable hardware reorder buffer for minimum latency (API 30+)
+                // Disable hardware reorder buffer → minimal latency (API 30+)
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                     setInteger(MediaFormat.KEY_LOW_LATENCY, 1)
                 }
-                // Real-time priority hint
+                // Real-time priority (0 = real-time)
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     setInteger(MediaFormat.KEY_PRIORITY, 0)
                 }
-                // Conservative max slice size – do NOT set KEY_COLOR_FORMAT when using a Surface
+                // DO NOT set KEY_COLOR_FORMAT for Surface output —
+                // the HAL negotiates the format automatically.
+                // Setting it on MStar/Amlogic chips causes OMX BadParameter errors.
                 setInteger(MediaFormat.KEY_MAX_INPUT_SIZE, width * height * 2)
             }
 
             val c = MediaCodec.createDecoderByType(mimeType)
-            // Surface output → zero-copy path; no crypto; decode (flags = 0)
-            c.configure(format, surface, null, 0)
+            c.configure(format, surface, null, 0)   // Surface = zero-copy output
             c.start()
 
-            codec = c
-            currentWidth  = width
-            currentHeight = height
+            codec           = c
+            currentWidth    = width
+            currentHeight   = height
             currentMimeType = mimeType
-            isConfigured = true
-            Log.i(tag, "Decoder started [$mimeType ${width}x$height]")
+            isConfigured    = true
+            Log.i(tag, "Decoder started [$mimeType ${width}x${height}]")
         } catch (e: Exception) {
-            Log.e(tag, "initSync failed ($mimeType): ${e.message}")
+            Log.e(tag, "initSync failed ($mimeType ${width}x${height}): ${e.message}")
             isConfigured = false
         }
     }
 
     private fun decodeSync(data: ByteArray, ptsUs: Long) {
         val c = codec ?: return
-        if (!isConfigured) return
 
         try {
-            // Feed input — 5 ms timeout is short enough to stay real-time but
-            // long enough to get a buffer even during brief codec stalls
-            val inIdx = c.dequeueInputBuffer(5_000L)
+            // 10 ms timeout — generous enough for the chip under load, still real-time
+            val inIdx = c.dequeueInputBuffer(10_000L)
             if (inIdx >= 0) {
-                val buf = c.getInputBuffer(inIdx) ?: run {
+                val buf = c.getInputBuffer(inIdx)
+                if (buf != null) {
+                    buf.clear()
+                    val writeLen = minOf(data.size, buf.remaining())
+                    if (writeLen < data.size) {
+                        Log.w(tag, "NAL truncated: ${data.size} → $writeLen bytes (buffer too small)")
+                    }
+                    buf.put(data, 0, writeLen)
+                    c.queueInputBuffer(inIdx, 0, writeLen, ptsUs, 0)
+                } else {
+                    // Release the slot so the codec can reuse it
                     c.queueInputBuffer(inIdx, 0, 0, ptsUs, 0)
-                    return
                 }
-                buf.clear()
-                val writeLen = minOf(data.size, buf.remaining())
-                buf.put(data, 0, writeLen)
-                c.queueInputBuffer(inIdx, 0, writeLen, ptsUs, 0)
+            } else {
+                Log.w(tag, "No input buffer available (decoder stalled?) — dropping NAL")
             }
 
-            // Drain all available output frames
+            // Drain all rendered output frames to the Surface
             drainOutput(c)
 
         } catch (e: MediaCodec.CodecException) {
             Log.e(tag, "CodecException: ${e.message} recoverable=${e.isRecoverable}")
             if (e.isRecoverable) {
-                c.reset()
+                try { c.reset() } catch (_: Exception) {}
                 initSync(currentWidth, currentHeight, currentMimeType)
             } else {
                 releaseSync()
             }
+        } catch (e: IllegalStateException) {
+            Log.e(tag, "IllegalState in decodeSync: ${e.message} — reinitialising")
+            initSync(currentWidth, currentHeight, currentMimeType)
         } catch (e: Exception) {
             Log.e(tag, "decodeSync error: ${e.message}")
         }
@@ -175,15 +200,15 @@ class H264Decoder(private val surface: Surface) {
 
     private fun drainOutput(c: MediaCodec) {
         val info = MediaCodec.BufferInfo()
-        var outIdx = c.dequeueOutputBuffer(info, 0L)
-        while (outIdx >= 0) {
-            // render = true → buffer is released directly to the Surface (zero-copy)
-            c.releaseOutputBuffer(outIdx, true)
+        var idx = c.dequeueOutputBuffer(info, 0L)
+        while (idx >= 0) {
+            // render = true → zero-copy blit to SurfaceView / SurfaceFlinger
+            c.releaseOutputBuffer(idx, true)
             updateFps()
-            outIdx = c.dequeueOutputBuffer(info, 0L)
+            idx = c.dequeueOutputBuffer(info, 0L)
         }
-        // INFO_OUTPUT_FORMAT_CHANGED and INFO_TRY_AGAIN_LATER are intentionally ignored;
-        // we just proceed on the next frame call.
+        // INFO_OUTPUT_FORMAT_CHANGED (-2) and INFO_TRY_AGAIN_LATER (-1) are intentionally
+        // ignored here; the OMX layer handles port reconfiguration internally.
     }
 
     private fun releaseSync() {
@@ -191,9 +216,9 @@ class H264Decoder(private val surface: Surface) {
             codec?.stop()
             codec?.release()
         } catch (e: Exception) {
-            Log.e(tag, "releaseSync error: ${e.message}")
+            Log.e(tag, "releaseSync: ${e.message}")
         } finally {
-            codec = null
+            codec        = null
             isConfigured = false
         }
     }
@@ -202,9 +227,9 @@ class H264Decoder(private val surface: Surface) {
         frameCount++
         val now = System.currentTimeMillis()
         if (now - lastFpsTs >= 1000L) {
-            currentFps  = frameCount.toInt()
-            frameCount  = 0
-            lastFpsTs   = now
+            currentFps = frameCount.toInt()
+            frameCount = 0
+            lastFpsTs  = now
         }
     }
 }
