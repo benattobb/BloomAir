@@ -72,9 +72,6 @@ class H264Decoder(private val surface: Surface) {
         if (!isConfigured) return
 
         try {
-            // Convert length-prefixed NAL units (AVCC/HVCC from Mac/iOS) to Annex B start codes (0x00 0x00 0x00 0x01)
-            ensureAnnexB(nalData, offset, length)
-
             // Use 20ms timeout to avoid dropping keyframes or SPS/PPS
             val inputBufferIndex = decoder.dequeueInputBuffer(20_000L)
             if (inputBufferIndex >= 0) {
@@ -94,38 +91,6 @@ class H264Decoder(private val surface: Surface) {
             }
         } catch (e: Exception) {
             Log.e(tag, "Error decoding low-latency frame: ${e.message}")
-        }
-    }
-
-    private fun ensureAnnexB(data: ByteArray, offset: Int, length: Int) {
-        var i = offset
-        val end = offset + length
-        while (i + 4 <= end) {
-            // Check if already Annex B start code (0x00 0x00 0x00 0x01 or 0x00 0x00 0x01)
-            if (data[i] == 0.toByte() && data[i + 1] == 0.toByte() &&
-                (data[i + 2] == 1.toByte() || (data[i + 2] == 0.toByte() && data[i + 3] == 1.toByte()))) {
-                return
-            }
-
-            // Read 4-byte big-endian NAL unit length
-            val nalLen = ((data[i].toInt() and 0xFF) shl 24) or
-                         ((data[i + 1].toInt() and 0xFF) shl 16) or
-                         ((data[i + 2].toInt() and 0xFF) shl 8) or
-                         (data[i + 3].toInt() and 0xFF)
-
-            if (nalLen > 0 && i + 4 + nalLen <= end) {
-                data[i] = 0
-                data[i + 1] = 0
-                data[i + 2] = 0
-                data[i + 3] = 1
-                i += 4 + nalLen
-            } else {
-                data[i] = 0
-                data[i + 1] = 0
-                data[i + 2] = 0
-                data[i + 3] = 1
-                break
-            }
         }
     }
 
