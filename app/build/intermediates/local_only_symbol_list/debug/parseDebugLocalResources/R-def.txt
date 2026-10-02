@@ -24,8 +24,12 @@ color text_muted
 color text_primary
 color text_secondary
 drawable banner
+drawable banner_bloomair
 drawable ic_airplay
+drawable ic_bloomair_512
+drawable ic_bloomair_foreground
 drawable ic_launcher_512
+drawable ic_launcher_foreground
 drawable ic_logo_black
 drawable minimal_badge
 drawable minimal_button_selector
@@ -55,6 +59,8 @@ id txtStatusBadge
 id videoSurfaceView
 layout activity_main
 layout dialog_settings
+mipmap ic_bloomair_launcher
+mipmap ic_bloomair_launcher_round
 mipmap ic_launcher
 mipmap ic_launcher_round
 string app_name

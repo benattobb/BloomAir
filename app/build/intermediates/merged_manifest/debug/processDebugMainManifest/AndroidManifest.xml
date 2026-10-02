@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.airplay.tv"
-    android:versionCode="1"
-    android:versionName="1.0.0" >
+    android:versionCode="2"
+    android:versionName="1.0.1" >
 
     <uses-sdk
         android:minSdkVersion="24"
@@ -39,18 +39,21 @@
         android:name="com.airplay.tv.AirPlayApp"
         android:allowBackup="true"
         android:appComponentFactory="androidx.core.app.CoreComponentFactory"
-        android:banner="@drawable/banner"
+        android:banner="@drawable/banner_bloomair"
         android:debuggable="true"
         android:extractNativeLibs="false"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/ic_bloomair_launcher"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/ic_bloomair_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AirPlayTV" >
         <activity
             android:name="com.airplay.tv.ui.MainActivity"
+            android:banner="@drawable/banner_bloomair"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
             android:exported="true"
+            android:icon="@mipmap/ic_bloomair_launcher"
+            android:roundIcon="@mipmap/ic_bloomair_launcher_round"
             android:screenOrientation="landscape"
             android:theme="@style/Theme.AirPlayTV" >
             <intent-filter>

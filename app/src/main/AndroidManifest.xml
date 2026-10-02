@@ -26,10 +26,10 @@
     <application
         android:name=".AirPlayApp"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/ic_bloomair_launcher"
         android:label="@string/app_name"
-        android:banner="@drawable/banner"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:banner="@drawable/banner_bloomair"
+        android:roundIcon="@mipmap/ic_bloomair_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AirPlayTV"
         tools:targetApi="35">
@@ -37,6 +37,9 @@
         <activity
             android:name=".ui.MainActivity"
             android:exported="true"
+            android:icon="@mipmap/ic_bloomair_launcher"
+            android:roundIcon="@mipmap/ic_bloomair_launcher_round"
+            android:banner="@drawable/banner_bloomair"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
             android:screenOrientation="landscape"
             android:theme="@style/Theme.AirPlayTV">
