@@ -2,8 +2,8 @@
 <resources>
     <style name="Theme.AirPlayTV" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="android:windowBackground">@color/bg_dark</item>
-        <item name="colorPrimary">@color/gradient_violet_start</item>
-        <item name="colorSecondary">@color/gradient_blue_end</item>
+        <item name="colorPrimary">@color/accent_sage</item>
+        <item name="colorSecondary">@color/text_primary</item>
         <item name="android:fontFamily">@font/ubuntu</item>
         <item name="fontFamily">@font/ubuntu</item>
         <item name="android:statusBarColor">@color/bg_dark</item>

@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
@@ -14,7 +15,6 @@ import androidx.annotation.Nullable;
 import androidx.viewbinding.ViewBinding;
 import androidx.viewbinding.ViewBindings;
 import com.airplay.tv.R;
-import com.airplay.tv.ui.MovingGradientView;
 import java.lang.NullPointerException;
 import java.lang.Override;
 import java.lang.String;
@@ -24,13 +24,7 @@ public final class ActivityMainBinding implements ViewBinding {
   private final FrameLayout rootView;
 
   @NonNull
-  public final LinearLayout badgeStatus;
-
-  @NonNull
-  public final Button btnFullscreen;
-
-  @NonNull
-  public final Button btnRenameTV;
+  public final Button btnSettings;
 
   @NonNull
   public final Button btnToggleServer;
@@ -42,31 +36,22 @@ public final class ActivityMainBinding implements ViewBinding {
   public final View dotStatus;
 
   @NonNull
-  public final MovingGradientView movingGradientBg;
+  public final ImageView imgAppLogo;
 
   @NonNull
   public final FrameLayout rootContainer;
 
   @NonNull
-  public final TextView tvSubtitle;
+  public final LinearLayout statusBadgeContainer;
 
   @NonNull
   public final TextView tvTitle;
 
   @NonNull
-  public final TextView txtAudioStats;
-
-  @NonNull
   public final TextView txtDeviceName;
 
   @NonNull
-  public final TextView txtIpAddress;
-
-  @NonNull
-  public final TextView txtPort;
-
-  @NonNull
-  public final TextView txtResolution;
+  public final TextView txtInstruction;
 
   @NonNull
   public final TextView txtSenderDevice;
@@ -77,30 +62,24 @@ public final class ActivityMainBinding implements ViewBinding {
   @NonNull
   public final SurfaceView videoSurfaceView;
 
-  private ActivityMainBinding(@NonNull FrameLayout rootView, @NonNull LinearLayout badgeStatus,
-      @NonNull Button btnFullscreen, @NonNull Button btnRenameTV, @NonNull Button btnToggleServer,
-      @NonNull LinearLayout dashboardOverlay, @NonNull View dotStatus,
-      @NonNull MovingGradientView movingGradientBg, @NonNull FrameLayout rootContainer,
-      @NonNull TextView tvSubtitle, @NonNull TextView tvTitle, @NonNull TextView txtAudioStats,
-      @NonNull TextView txtDeviceName, @NonNull TextView txtIpAddress, @NonNull TextView txtPort,
-      @NonNull TextView txtResolution, @NonNull TextView txtSenderDevice,
-      @NonNull TextView txtStatusBadge, @NonNull SurfaceView videoSurfaceView) {
+  private ActivityMainBinding(@NonNull FrameLayout rootView, @NonNull Button btnSettings,
+      @NonNull Button btnToggleServer, @NonNull LinearLayout dashboardOverlay,
+      @NonNull View dotStatus, @NonNull ImageView imgAppLogo, @NonNull FrameLayout rootContainer,
+      @NonNull LinearLayout statusBadgeContainer, @NonNull TextView tvTitle,
+      @NonNull TextView txtDeviceName, @NonNull TextView txtInstruction,
+      @NonNull TextView txtSenderDevice, @NonNull TextView txtStatusBadge,
+      @NonNull SurfaceView videoSurfaceView) {
     this.rootView = rootView;
-    this.badgeStatus = badgeStatus;
-    this.btnFullscreen = btnFullscreen;
-    this.btnRenameTV = btnRenameTV;
+    this.btnSettings = btnSettings;
     this.btnToggleServer = btnToggleServer;
     this.dashboardOverlay = dashboardOverlay;
     this.dotStatus = dotStatus;
-    this.movingGradientBg = movingGradientBg;
+    this.imgAppLogo = imgAppLogo;
     this.rootContainer = rootContainer;
-    this.tvSubtitle = tvSubtitle;
+    this.statusBadgeContainer = statusBadgeContainer;
     this.tvTitle = tvTitle;
-    this.txtAudioStats = txtAudioStats;
     this.txtDeviceName = txtDeviceName;
-    this.txtIpAddress = txtIpAddress;
-    this.txtPort = txtPort;
-    this.txtResolution = txtResolution;
+    this.txtInstruction = txtInstruction;
     this.txtSenderDevice = txtSenderDevice;
     this.txtStatusBadge = txtStatusBadge;
     this.videoSurfaceView = videoSurfaceView;
@@ -133,21 +112,9 @@ public final class ActivityMainBinding implements ViewBinding {
     // This is done to optimize the compiled bytecode for size and performance.
     int id;
     missingId: {
-      id = R.id.badgeStatus;
-      LinearLayout badgeStatus = ViewBindings.findChildViewById(rootView, id);
-      if (badgeStatus == null) {
-        break missingId;
-      }
-
-      id = R.id.btnFullscreen;
-      Button btnFullscreen = ViewBindings.findChildViewById(rootView, id);
-      if (btnFullscreen == null) {
-        break missingId;
-      }
-
-      id = R.id.btnRenameTV;
-      Button btnRenameTV = ViewBindings.findChildViewById(rootView, id);
-      if (btnRenameTV == null) {
+      id = R.id.btnSettings;
+      Button btnSettings = ViewBindings.findChildViewById(rootView, id);
+      if (btnSettings == null) {
         break missingId;
       }
 
@@ -169,17 +136,17 @@ public final class ActivityMainBinding implements ViewBinding {
         break missingId;
       }
 
-      id = R.id.movingGradientBg;
-      MovingGradientView movingGradientBg = ViewBindings.findChildViewById(rootView, id);
-      if (movingGradientBg == null) {
+      id = R.id.imgAppLogo;
+      ImageView imgAppLogo = ViewBindings.findChildViewById(rootView, id);
+      if (imgAppLogo == null) {
         break missingId;
       }
 
       FrameLayout rootContainer = (FrameLayout) rootView;
 
-      id = R.id.tvSubtitle;
-      TextView tvSubtitle = ViewBindings.findChildViewById(rootView, id);
-      if (tvSubtitle == null) {
+      id = R.id.statusBadgeContainer;
+      LinearLayout statusBadgeContainer = ViewBindings.findChildViewById(rootView, id);
+      if (statusBadgeContainer == null) {
         break missingId;
       }
 
@@ -189,33 +156,15 @@ public final class ActivityMainBinding implements ViewBinding {
         break missingId;
       }
 
-      id = R.id.txtAudioStats;
-      TextView txtAudioStats = ViewBindings.findChildViewById(rootView, id);
-      if (txtAudioStats == null) {
-        break missingId;
-      }
-
       id = R.id.txtDeviceName;
       TextView txtDeviceName = ViewBindings.findChildViewById(rootView, id);
       if (txtDeviceName == null) {
         break missingId;
       }
 
-      id = R.id.txtIpAddress;
-      TextView txtIpAddress = ViewBindings.findChildViewById(rootView, id);
-      if (txtIpAddress == null) {
-        break missingId;
-      }
-
-      id = R.id.txtPort;
-      TextView txtPort = ViewBindings.findChildViewById(rootView, id);
-      if (txtPort == null) {
-        break missingId;
-      }
-
-      id = R.id.txtResolution;
-      TextView txtResolution = ViewBindings.findChildViewById(rootView, id);
-      if (txtResolution == null) {
+      id = R.id.txtInstruction;
+      TextView txtInstruction = ViewBindings.findChildViewById(rootView, id);
+      if (txtInstruction == null) {
         break missingId;
       }
 
@@ -237,10 +186,9 @@ public final class ActivityMainBinding implements ViewBinding {
         break missingId;
       }
 
-      return new ActivityMainBinding((FrameLayout) rootView, badgeStatus, btnFullscreen,
-          btnRenameTV, btnToggleServer, dashboardOverlay, dotStatus, movingGradientBg,
-          rootContainer, tvSubtitle, tvTitle, txtAudioStats, txtDeviceName, txtIpAddress, txtPort,
-          txtResolution, txtSenderDevice, txtStatusBadge, videoSurfaceView);
+      return new ActivityMainBinding((FrameLayout) rootView, btnSettings, btnToggleServer,
+          dashboardOverlay, dotStatus, imgAppLogo, rootContainer, statusBadgeContainer, tvTitle,
+          txtDeviceName, txtInstruction, txtSenderDevice, txtStatusBadge, videoSurfaceView);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

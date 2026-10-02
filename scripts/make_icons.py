@@ -54,23 +54,24 @@ def decode_png(path):
 def encode_png(width, height, rgba_buffer):
     raw_data = bytearray()
     for y in range(height):
-        raw_data.append(0) # None filter
+        raw_data.append(0)
         row_start = y * width * 4
         raw_data.extend(rgba_buffer[row_start : row_start + width * 4])
     compressed = zlib.compress(raw_data, 9)
 
     out = bytearray(b'\x89PNG\r\n\x1a\n')
+    # IHDR
     ihdr = struct.pack('>IIBBBBB', width, height, 8, 6, 0, 0, 0)
-    out.extend(struct.pack('>I', 13))
-    out.extend(b'IHDR')
-    out.extend(ihdr)
+    out.extend(struct.pack('>I', len(ihdr)))
+    out.extend(b'IHDR' + ihdr)
     out.extend(struct.pack('>I', zlib.crc32(b'IHDR' + ihdr)))
 
+    # IDAT
     out.extend(struct.pack('>I', len(compressed)))
-    out.extend(b'IDAT')
-    out.extend(compressed)
+    out.extend(b'IDAT' + compressed)
     out.extend(struct.pack('>I', zlib.crc32(b'IDAT' + compressed)))
 
+    # IEND
     out.extend(struct.pack('>I', 0))
     out.extend(b'IEND')
     out.extend(struct.pack('>I', zlib.crc32(b'IEND')))
@@ -103,12 +104,22 @@ def get_pixel_bilinear(src_w, src_h, src_pixels, u, v):
 
     return interp(r00, r10, r01, r11), interp(g00, g10, g01, g11), interp(b00, b10, b01, b11), interp(a00, a10, a01, a11)
 
-def render_frosted_icon(size, src_w, src_h, src_pixels):
+def render_sage_icon(size, src_w, src_h, src_pixels):
+    """
+    Renders Dark Iron blossom on a soothing Sage background squircle.
+    Minimal, architectural, and very easy on the eyes.
+    """
     buf = bytearray(size * size * 4)
-    radius = size * 0.24 # Squircle corner radius
-    inner_pad = size * 0.10
-    inner_radius = size * 0.18
-    icon_pad = size * 0.22
+    radius = size * 0.25 # Squircle corner radius
+    icon_pad = size * 0.20 # Generous breathing room for minimal aesthetic
+
+    # Soft Sage background palette (gradient subtle top to bottom)
+    bg_top = (212, 222, 215) # #D4DED7
+    bg_bot = (195, 208, 199) # #C3D0C7
+    rim_color = (175, 190, 180) # Subtle 1.5% edge outline
+
+    # Dark Iron color for the flower icon: #181A1C (matte cast iron)
+    iron_r, iron_g, iron_b = 24, 26, 28
 
     for y in range(size):
         for x in range(size):
@@ -122,62 +133,28 @@ def render_frosted_icon(size, src_w, src_h, src_pixels):
                 buf[idx : idx + 4] = [0, 0, 0, 0]
                 continue
 
-            # 1. Vibrant Violet-to-Blue Linear Gradient
-            t = (x + y) / (size * 2.0) # diagonal gradient
-            # violet (124, 58, 237) -> cobalt blue (37, 99, 235) -> cyan (6, 182, 212)
-            if t < 0.6:
-                nt = t / 0.6
-                bg_r = int(124 * (1 - nt) + 37 * nt)
-                bg_g = int(58 * (1 - nt) + 99 * nt)
-                bg_b = int(237 * (1 - nt) + 235 * nt)
-            else:
-                nt = (t - 0.6) / 0.4
-                bg_r = int(37 * (1 - nt) + 6 * nt)
-                bg_g = int(99 * (1 - nt) + 182 * nt)
-                bg_b = int(235 * (1 - nt) + 212 * nt)
+            t = y / float(size)
+            cr = int(bg_top[0] * (1 - t) + bg_bot[0] * t)
+            cg = int(bg_top[1] * (1 - t) + bg_bot[1] * t)
+            cb = int(bg_top[2] * (1 - t) + bg_bot[2] * t)
 
-            # 2. Inner Frosted Glass plate
-            idx_in_plate = False
-            border_alpha = 0.0
-            glass_alpha = 0.0
-            if inner_pad <= x <= size - inner_pad and inner_pad <= y <= size - inner_pad:
-                idx_dx = max(0, abs(x - size / 2.0) - (size / 2.0 - inner_pad - inner_radius))
-                idx_dy = max(0, abs(y - size / 2.0) - (size / 2.0 - inner_pad - inner_radius))
-                plate_dist = math.sqrt(idx_dx * idx_dx + idx_dy * idx_dy)
-                if plate_dist <= inner_radius:
-                    idx_in_plate = True
-                    # Frost tint
-                    glass_alpha = 0.38
-                    # Glass highlight top
-                    if y < size * 0.45:
-                        glass_alpha += 0.18
-                    # Stroke edge
-                    if plate_dist >= inner_radius - max(1.5, size * 0.02):
-                        border_alpha = 0.75
+            # Refined inner rim
+            if dist >= radius - max(1.5, size * 0.025):
+                cr = int(cr * 0.3 + rim_color[0] * 0.7)
+                cg = int(cg * 0.3 + rim_color[1] * 0.7)
+                cb = int(cb * 0.3 + rim_color[2] * 0.7)
 
-            # Composite background + frosted glass
-            cr, cg, cb = bg_r, bg_g, bg_b
-            if idx_in_plate:
-                cr = int(cr * (1 - glass_alpha) + 255 * glass_alpha)
-                cg = int(cg * (1 - glass_alpha) + 255 * glass_alpha)
-                cb = int(cb * (1 - glass_alpha) + 255 * glass_alpha)
-            if border_alpha > 0:
-                cr = int(cr * (1 - border_alpha) + 255 * border_alpha)
-                cg = int(cg * (1 - border_alpha) + 255 * border_alpha)
-                cb = int(cb * (1 - border_alpha) + 255 * border_alpha)
-
-            # 3. Main Black Icon (centered)
+            # Dark Iron Blossom Icon in center
             if icon_pad <= x < size - icon_pad and icon_pad <= y < size - icon_pad:
                 src_u = (x - icon_pad) / (size - 2 * icon_pad) * (src_w - 1)
                 src_v = (y - icon_pad) / (size - 2 * icon_pad) * (src_h - 1)
                 ir, ig, ib, ia = get_pixel_bilinear(src_w, src_h, src_pixels, src_u, src_v)
                 if ia > 10:
-                    icon_a = ia / 255.0
-                    cr = int(cr * (1 - icon_a) + ir * icon_a)
-                    cg = int(cg * (1 - icon_a) + ig * icon_a)
-                    cb = int(cb * (1 - icon_a) + ib * icon_a)
+                    alpha = ia / 255.0
+                    cr = int(cr * (1 - alpha) + iron_r * alpha)
+                    cg = int(cg * (1 - alpha) + iron_g * alpha)
+                    cb = int(cb * (1 - alpha) + iron_b * alpha)
 
-            # Anti-aliasing outer corner edge
             edge_alpha = 255
             if radius - dist < 1.0:
                 edge_alpha = int(255 * max(0, radius - dist))
@@ -187,19 +164,19 @@ def render_frosted_icon(size, src_w, src_h, src_pixels):
     return buf
 
 def render_tv_banner(width, height, icon_buf, icon_size):
+    """
+    Renders a clean, minimal TV banner for Android TV Leanback launcher.
+    Matte charcoal iron backdrop with sage squircle icon on the left.
+    """
     buf = bytearray(width * height * 4)
-    # Dark Violet / Blue Mesh Gradient
+    # Deep matte charcoal (#151618)
     for y in range(height):
         for x in range(width):
             idx = (y * width + x) * 4
-            t = (x + y * 0.5) / (width * 1.2)
-            r = int(14 * (1 - t) + 10 * t)
-            g = int(10 * (1 - t) + 16 * t)
-            b = int(28 * (1 - t) + 48 * t)
-            buf[idx : idx + 4] = [r, g, b, 255]
+            buf[idx : idx + 4] = [21, 22, 24, 255]
 
-    # Stamp the frosted icon on the left of banner
-    start_x = int(height * 0.15)
+    # Stamp the sage squircle icon on the left of banner
+    start_x = int(height * 0.18)
     start_y = int((height - icon_size) / 2.0)
     for iy in range(icon_size):
         for ix in range(icon_size):
@@ -217,48 +194,49 @@ def render_tv_banner(width, height, icon_buf, icon_size):
                     buf[d_idx+2] = int(db * (1 - alpha) + sb * alpha)
     return buf
 
-input_icon = "/Users/benattobb/.gemini/antigravity/brain/62540650-7aee-4f9b-b2e8-2f68f0de6485/.user_uploaded/media_1790975577170.png"
-res_dir = "/Users/benattobb/Documents/BloomAir/app/src/main/res"
+if __name__ == "__main__":
+    input_icon = "/Users/benattobb/.gemini/antigravity/brain/62540650-7aee-4f9b-b2e8-2f68f0de6485/.user_uploaded/media_1790975577170.png"
+    res_dir = "/Users/benattobb/Documents/BloomAir/app/src/main/res"
 
-print("[*] Decoding uploaded icon...")
-src_w, src_h, src_pixels = decode_png(input_icon)
-print(f"[+] Loaded {src_w}x{src_h} image.")
+    print("[*] Decoding uploaded icon...")
+    src_w, src_h, src_pixels = decode_png(input_icon)
+    print(f"[+] Loaded {src_w}x{src_h} image.")
 
-sizes = [
-    ("mipmap-mdpi", 48),
-    ("mipmap-hdpi", 72),
-    ("mipmap-xhdpi", 96),
-    ("mipmap-xxhdpi", 144),
-    ("mipmap-xxxhdpi", 192),
-    ("drawable", 512),
-]
+    sizes = [
+        ("mipmap-mdpi", 48),
+        ("mipmap-hdpi", 72),
+        ("mipmap-xhdpi", 96),
+        ("mipmap-xxhdpi", 144),
+        ("mipmap-xxxhdpi", 192),
+        ("drawable", 512),
+    ]
 
-for dir_name, size in sizes:
-    target_dir = os.path.join(res_dir, dir_name)
-    os.makedirs(target_dir, exist_ok=True)
-    print(f"[*] Rendering {size}x{size} icon for {dir_name}...")
-    icon_buf = render_frosted_icon(size, src_w, src_h, src_pixels)
-    png_data = encode_png(size, size, icon_buf)
+    for dir_name, size in sizes:
+        target_dir = os.path.join(res_dir, dir_name)
+        os.makedirs(target_dir, exist_ok=True)
+        print(f"[*] Rendering {size}x{size} sage icon for {dir_name}...")
+        icon_buf = render_sage_icon(size, src_w, src_h, src_pixels)
+        png_data = encode_png(size, size, icon_buf)
 
-    fname = "ic_launcher_512.png" if dir_name == "drawable" else "ic_launcher.png"
-    with open(os.path.join(target_dir, fname), "wb") as f:
-        f.write(png_data)
-    if dir_name != "drawable":
-        with open(os.path.join(target_dir, "ic_launcher_round.png"), "wb") as f:
+        fname = "ic_launcher_512.png" if dir_name == "drawable" else "ic_launcher.png"
+        with open(os.path.join(target_dir, fname), "wb") as f:
             f.write(png_data)
+        if dir_name != "drawable":
+            with open(os.path.join(target_dir, "ic_launcher_round.png"), "wb") as f:
+                f.write(png_data)
 
-# TV Banner: 320x180 and 640x360
-print("[*] Rendering TV Banner (320x180 & 640x360)...")
-banner_icon_size = 120
-banner_icon = render_frosted_icon(banner_icon_size, src_w, src_h, src_pixels)
-banner_320 = render_tv_banner(320, 180, banner_icon, banner_icon_size)
-with open(os.path.join(res_dir, "drawable", "banner.png"), "wb") as f:
-    f.write(encode_png(320, 180, banner_320))
+    # TV Banner: 320x180 and 640x360
+    print("[*] Rendering TV Banner (320x180 & 640x360)...")
+    banner_icon_size = 110
+    banner_icon = render_sage_icon(banner_icon_size, src_w, src_h, src_pixels)
+    banner_320 = render_tv_banner(320, 180, banner_icon, banner_icon_size)
+    with open(os.path.join(res_dir, "drawable", "banner.png"), "wb") as f:
+        f.write(encode_png(320, 180, banner_320))
 
-banner_640_icon = render_frosted_icon(240, src_w, src_h, src_pixels)
-banner_640 = render_tv_banner(640, 360, banner_640_icon, 240)
-os.makedirs(os.path.join(res_dir, "drawable-xhdpi"), exist_ok=True)
-with open(os.path.join(res_dir, "drawable-xhdpi", "banner.png"), "wb") as f:
-    f.write(encode_png(640, 360, banner_640))
+    banner_640_icon = render_sage_icon(220, src_w, src_h, src_pixels)
+    banner_640 = render_tv_banner(640, 360, banner_640_icon, 220)
+    os.makedirs(os.path.join(res_dir, "drawable-xhdpi"), exist_ok=True)
+    with open(os.path.join(res_dir, "drawable-xhdpi", "banner.png"), "wb") as f:
+        f.write(encode_png(640, 360, banner_640))
 
-print("[+] All icons and TV banners generated successfully!")
+    print("[+] All Dark Iron on Sage icons and TV banners generated successfully!")

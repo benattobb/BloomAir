@@ -1,19 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/rootContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/bg_dark">
 
-    <!-- Fluid Moving Violet/Blue Gradient Background -->
-    <com.airplay.tv.ui.MovingGradientView
-        android:id="@+id/movingGradientBg"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
-    <!-- AirPlay Hardware Video Surface View -->
+    <!-- AirPlay Hardware Video Surface View (Hardware zero-copy) -->
     <SurfaceView
         android:id="@+id/videoSurfaceView"
         android:layout_width="match_parent"
@@ -21,33 +14,37 @@
         android:layout_gravity="center"
         android:visibility="gone" />
 
-    <!-- Frosted Glass TV Dashboard Overlay -->
+    <!-- Minimal TV Front Dashboard Overlay -->
     <LinearLayout
         android:id="@+id/dashboardOverlay"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:padding="48dp"
+        android:paddingStart="64dp"
+        android:paddingTop="48dp"
+        android:paddingEnd="64dp"
+        android:paddingBottom="48dp"
         android:visibility="visible">
 
-        <!-- Top Header with Frosted Logo and App Name -->
+        <!-- Top Minimal Header Bar -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
-            <!-- Frosted Glass App Icon -->
+            <!-- Sage & Dark Iron Blossom Icon -->
             <ImageView
-                android:layout_width="64dp"
-                android:layout_height="64dp"
+                android:id="@+id/imgAppLogo"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
                 android:contentDescription="@string/app_name"
                 android:src="@drawable/ic_launcher_512" />
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
+                android:layout_marginStart="16dp"
                 android:layout_weight="1"
                 android:orientation="vertical">
 
@@ -55,316 +52,168 @@
                     android:id="@+id/tvTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/ubuntu"
+                    android:fontFamily="@font/ubuntu_bold"
                     android:text="@string/app_name"
                     android:textColor="@color/text_primary"
-                    android:textSize="36sp"
-                    android:textStyle="bold" />
+                    android:textSize="20sp" />
 
                 <TextView
-                    android:id="@+id/tvSubtitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp"
-                    android:fontFamily="@font/ubuntu"
-                    android:text="@string/app_tagline"
-                    android:textColor="@color/text_secondary"
-                    android:textSize="17sp" />
+                    android:fontFamily="@font/ubuntu_regular"
+                    android:text="AirPlay Receiver"
+                    android:textColor="@color/text_muted"
+                    android:textSize="12sp" />
             </LinearLayout>
 
-            <!-- Frosted Status Badge -->
+            <!-- Minimal Status Pill Badge -->
             <LinearLayout
-                android:id="@+id/badgeStatus"
+                android:id="@+id/statusBadgeContainer"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/glass_badge"
+                android:layout_height="36dp"
+                android:background="@drawable/minimal_badge"
                 android:gravity="center_vertical"
-                android:paddingHorizontal="22dp"
-                android:paddingVertical="10dp">
+                android:paddingStart="16dp"
+                android:paddingEnd="18dp">
 
                 <View
                     android:id="@+id/dotStatus"
-                    android:layout_width="12dp"
-                    android:layout_height="12dp"
-                    android:background="@drawable/glass_card"
-                    android:backgroundTint="@color/status_green" />
+                    android:layout_width="8dp"
+                    android:layout_height="8dp"
+                    android:background="@drawable/minimal_dot"
+                    android:backgroundTint="@color/status_ready" />
 
                 <TextView
                     android:id="@+id/txtStatusBadge"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
-                    android:fontFamily="@font/ubuntu"
-                    android:text="ONLINE &amp; READY"
-                    android:textColor="@color/status_green"
-                    android:textSize="15sp"
-                    android:textStyle="bold" />
+                    android:layout_marginStart="8dp"
+                    android:fontFamily="@font/ubuntu_medium"
+                    android:letterSpacing="0.05"
+                    android:text="READY TO CONNECT"
+                    android:textColor="@color/accent_sage"
+                    android:textSize="11sp" />
             </LinearLayout>
         </LinearLayout>
 
-        <!-- 3 Frosted Glass Columns -->
-        <LinearLayout
+        <!-- Spacer -->
+        <View
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginTop="32dp"
-            android:layout_weight="1"
-            android:orientation="horizontal">
+            android:layout_weight="1" />
 
-            <!-- Card 1: Receiver Details -->
+        <!-- Center Stage: The Basics Only -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/minimal_card"
+            android:orientation="vertical"
+            android:paddingStart="44dp"
+            android:paddingTop="36dp"
+            android:paddingEnd="44dp"
+            android:paddingBottom="36dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/ubuntu_medium"
+                android:letterSpacing="0.12"
+                android:text="AIRPLAY RECEIVER"
+                android:textColor="@color/text_muted"
+                android:textSize="11sp" />
+
+            <TextView
+                android:id="@+id/txtDeviceName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:fontFamily="@font/ubuntu_bold"
+                android:text="BloomAir TV"
+                android:textColor="@color/text_primary"
+                android:textSize="36sp" />
+
+            <TextView
+                android:id="@+id/txtInstruction"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:fontFamily="@font/ubuntu_regular"
+                android:lineSpacingExtra="4dp"
+                android:text="Open Control Center on your iPad or Mac, select Screen Mirroring, and choose BloomAir TV."
+                android:textColor="@color/text_secondary"
+                android:textSize="15sp" />
+
+            <!-- Device Connection Status Line -->
             <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginEnd="16dp"
-                android:layout_weight="1"
-                android:background="@drawable/glass_card"
-                android:orientation="vertical"
-                android:padding="26dp">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/ubuntu"
-                    android:text="RECEIVER CONFIG"
-                    android:textColor="@color/text_tertiary"
-                    android:textSize="13sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="14dp"
-                    android:fontFamily="@font/ubuntu"
-                    android:text="@string/lbl_device_name"
-                    android:textColor="@color/text_secondary"
-                    android:textSize="14sp" />
-
-                <TextView
-                    android:id="@+id/txtDeviceName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/ubuntu"
-                    android:text="BloomAir TV"
-                    android:textColor="@color/text_primary"
-                    android:textSize="22sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="14dp"
-                    android:fontFamily="@font/ubuntu"
-                    android:text="@string/lbl_ip_address"
-                    android:textColor="@color/text_secondary"
-                    android:textSize="14sp" />
-
-                <TextView
-                    android:id="@+id/txtIpAddress"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/ubuntu"
-                    android:text="192.168.1.199"
-                    android:textColor="@color/text_primary"
-                    android:textSize="19sp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="14dp"
-                    android:fontFamily="@font/ubuntu"
-                    android:text="@string/lbl_port"
-                    android:textColor="@color/text_secondary"
-                    android:textSize="14sp" />
-
-                <TextView
-                    android:id="@+id/txtPort"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/ubuntu"
-                    android:text="7000 (RTSP) / 7001 (RAOP)"
-                    android:textColor="@color/text_primary"
-                    android:textSize="17sp" />
-            </LinearLayout>
-
-            <!-- Card 2: Low Latency Engine Stats -->
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginHorizontal="8dp"
-                android:layout_weight="1"
-                android:background="@drawable/glass_card"
-                android:orientation="vertical"
-                android:padding="26dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/ubuntu"
-                    android:text="SPEED &amp; LATENCY ENGINE"
-                    android:textColor="@color/text_tertiary"
-                    android:textSize="13sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="14dp"
-                    android:fontFamily="@font/ubuntu"
-                    android:text="Connected Device:"
-                    android:textColor="@color/text_secondary"
-                    android:textSize="14sp" />
+                    android:fontFamily="@font/ubuntu_regular"
+                    android:text="Device Status: "
+                    android:textColor="@color/text_muted"
+                    android:textSize="13sp" />
 
                 <TextView
                     android:id="@+id/txtSenderDevice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/ubuntu"
+                    android:fontFamily="@font/ubuntu_medium"
                     android:text="Waiting for connection..."
-                    android:textColor="@color/status_yellow"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="14dp"
-                    android:fontFamily="@font/ubuntu"
-                    android:text="Display Pipeline:"
-                    android:textColor="@color/text_secondary"
-                    android:textSize="14sp" />
-
-                <TextView
-                    android:id="@+id/txtResolution"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/ubuntu"
-                    android:text="1080p60 • Zero-Copy Surface"
-                    android:textColor="@color/text_primary"
-                    android:textSize="17sp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="14dp"
-                    android:fontFamily="@font/ubuntu"
-                    android:text="Network Buffer:"
-                    android:textColor="@color/text_secondary"
-                    android:textSize="14sp" />
-
-                <TextView
-                    android:id="@+id/txtAudioStats"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/ubuntu"
-                    android:text="TCP_NODELAY • &lt; 40ms sync"
-                    android:textColor="@color/status_green"
-                    android:textSize="17sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
-
-            <!-- Card 3: Apple Connection Steps -->
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginStart="16dp"
-                android:layout_weight="1"
-                android:background="@drawable/glass_card"
-                android:orientation="vertical"
-                android:padding="26dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/ubuntu"
-                    android:text="HOW TO CAST"
-                    android:textColor="@color/text_tertiary"
-                    android:textSize="13sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="14dp"
-                    android:fontFamily="@font/ubuntu"
-                    android:lineSpacingExtra="5dp"
-                    android:text="@string/step_1"
-                    android:textColor="@color/text_primary"
-                    android:textSize="15sp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:fontFamily="@font/ubuntu"
-                    android:lineSpacingExtra="5dp"
-                    android:text="@string/step_2"
-                    android:textColor="@color/text_primary"
-                    android:textSize="15sp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:fontFamily="@font/ubuntu"
-                    android:lineSpacingExtra="5dp"
-                    android:text="@string/step_3"
-                    android:textColor="@color/text_primary"
-                    android:textSize="15sp" />
+                    android:textColor="@color/accent_sage"
+                    android:textSize="13sp" />
             </LinearLayout>
         </LinearLayout>
 
-        <!-- TV Remote D-Pad Navigation Buttons -->
+        <!-- Spacer -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <!-- Bottom Actions (Basics Only) -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="28dp"
             android:gravity="center"
             android:orientation="horizontal">
 
             <Button
                 android:id="@+id/btnToggleServer"
                 android:layout_width="wrap_content"
-                android:layout_height="54dp"
-                android:background="@drawable/glass_button_selector"
+                android:layout_height="48dp"
+                android:background="@drawable/minimal_button_selector"
                 android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:fontFamily="@font/ubuntu"
-                android:minWidth="180dp"
-                android:text="@string/btn_stop"
+                android:fontFamily="@font/ubuntu_medium"
+                android:nextFocusRight="@id/btnSettings"
+                android:paddingStart="28dp"
+                android:paddingEnd="28dp"
+                android:text="Stop Receiver"
                 android:textAllCaps="false"
-                android:textColor="@color/text_primary"
-                android:textSize="17sp"
-                android:textStyle="bold" />
+                android:textColor="@color/minimal_button_text_selector"
+                android:textSize="14sp" />
 
             <Button
-                android:id="@+id/btnRenameTV"
+                android:id="@+id/btnSettings"
                 android:layout_width="wrap_content"
-                android:layout_height="54dp"
-                android:layout_marginStart="24dp"
-                android:background="@drawable/glass_button_selector"
+                android:layout_height="48dp"
+                android:layout_marginStart="18dp"
+                android:background="@drawable/minimal_button_selector"
                 android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:fontFamily="@font/ubuntu"
-                android:minWidth="180dp"
-                android:text="@string/btn_rename"
+                android:fontFamily="@font/ubuntu_medium"
+                android:nextFocusLeft="@id/btnToggleServer"
+                android:paddingStart="28dp"
+                android:paddingEnd="28dp"
+                android:text="Settings &amp; Details"
                 android:textAllCaps="false"
-                android:textColor="@color/text_primary"
-                android:textSize="17sp" />
-
-            <Button
-                android:id="@+id/btnFullscreen"
-                android:layout_width="wrap_content"
-                android:layout_height="54dp"
-                android:layout_marginStart="24dp"
-                android:background="@drawable/glass_button_selector"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:fontFamily="@font/ubuntu"
-                android:minWidth="180dp"
-                android:text="@string/btn_switch_video"
-                android:textAllCaps="false"
-                android:textColor="@color/text_primary"
-                android:textSize="17sp" />
+                android:textColor="@color/minimal_button_text_selector"
+                android:textSize="14sp" />
         </LinearLayout>
     </LinearLayout>
-
 </FrameLayout>

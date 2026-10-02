@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="680dp"
+    android:layout_height="wrap_content"
+    android:background="@drawable/minimal_dialog_bg"
+    android:orientation="vertical"
+    android:padding="32dp">
+
+    <!-- Header -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/ubuntu_bold"
+        android:text="Settings &amp; Details"
+        android:textColor="@color/text_primary"
+        android:textSize="22sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:fontFamily="@font/ubuntu_regular"
+        android:text="Technical configuration, streaming parameters and device preferences"
+        android:textColor="@color/text_secondary"
+        android:textSize="13sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:background="@color/divider_color" />
+
+    <!-- Details Grid -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:baselineAligned="false"
+        android:orientation="horizontal">
+
+        <!-- Column 1: Network & RTSP -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/ubuntu_medium"
+                android:text="NETWORK &amp; AIRPLAY"
+                android:textColor="@color/text_muted"
+                android:textSize="11sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:fontFamily="@font/ubuntu_regular"
+                android:text="Local IP Address"
+                android:textColor="@color/text_secondary"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/dialogTxtIp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/ubuntu_medium"
+                android:text="192.168.1.199"
+                android:textColor="@color/text_primary"
+                android:textSize="14sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:fontFamily="@font/ubuntu_regular"
+                android:text="Ports"
+                android:textColor="@color/text_secondary"
+                android:textSize="12sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/ubuntu_medium"
+                android:text="7000 (RTSP) / 7001 (RAOP)"
+                android:textColor="@color/text_primary"
+                android:textSize="14sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:fontFamily="@font/ubuntu_regular"
+                android:text="Wi-Fi Performance Lock"
+                android:textColor="@color/text_secondary"
+                android:textSize="12sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/ubuntu_medium"
+                android:text="Active (WIFI_MODE_FULL_LOW_LATENCY)"
+                android:textColor="@color/accent_sage"
+                android:textSize="13sp" />
+        </LinearLayout>
+
+        <!-- Column 2: Performance & Engine -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/ubuntu_medium"
+                android:text="SPEED &amp; LATENCY ENGINE"
+                android:textColor="@color/text_muted"
+                android:textSize="11sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:fontFamily="@font/ubuntu_regular"
+                android:text="Video Decoder"
+                android:textColor="@color/text_secondary"
+                android:textSize="12sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/ubuntu_medium"
+                android:text="Hardware H.264 (MediaCodec)"
+                android:textColor="@color/text_primary"
+                android:textSize="14sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:fontFamily="@font/ubuntu_regular"
+                android:text="Display Pipeline"
+                android:textColor="@color/text_secondary"
+                android:textSize="12sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/ubuntu_medium"
+                android:text="1080p60 • Zero-Copy Surface"
+                android:textColor="@color/text_primary"
+                android:textSize="14sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:fontFamily="@font/ubuntu_regular"
+                android:text="Network Latency Buffer"
+                android:textColor="@color/text_secondary"
+                android:textSize="12sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/ubuntu_medium"
+                android:text="TCP_NODELAY • &lt; 40ms"
+                android:textColor="@color/accent_sage"
+                android:textSize="13sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="24dp"
+        android:background="@color/divider_color" />
+
+    <!-- Action Buttons Row -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="end"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/dialogBtnRename"
+            android:layout_width="wrap_content"
+            android:layout_height="44dp"
+            android:background="@drawable/minimal_button_selector"
+            android:focusable="true"
+            android:fontFamily="@font/ubuntu_medium"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:text="Rename TV"
+            android:textAllCaps="false"
+            android:textColor="@color/minimal_button_text_selector"
+            android:textSize="13sp" />
+
+        <Button
+            android:id="@+id/dialogBtnVideoSurface"
+            android:layout_width="wrap_content"
+            android:layout_height="44dp"
+            android:layout_marginStart="14dp"
+            android:background="@drawable/minimal_button_selector"
+            android:focusable="true"
+            android:fontFamily="@font/ubuntu_medium"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:text="Mirroring Display"
+            android:textAllCaps="false"
+            android:textColor="@color/minimal_button_text_selector"
+            android:textSize="13sp" />
+
+        <Button
+            android:id="@+id/dialogBtnClose"
+            android:layout_width="wrap_content"
+            android:layout_height="44dp"
+            android:layout_marginStart="14dp"
+            android:background="@drawable/minimal_button_selector"
+            android:focusable="true"
+            android:fontFamily="@font/ubuntu_medium"
+            android:paddingStart="24dp"
+            android:paddingEnd="24dp"
+            android:text="Done"
+            android:textAllCaps="false"
+            android:textColor="@color/minimal_button_text_selector"
+            android:textSize="13sp" />
+    </LinearLayout>
+</LinearLayout>
