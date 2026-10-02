@@ -152,6 +152,25 @@ class MainActivity : AppCompatActivity(), SurfaceHolder.Callback {
                 }
             }
         }
+
+        var pinDialog: AlertDialog? = null
+        lifecycleScope.launch {
+            airPlayService?.pinCode?.collectLatest { pin ->
+                runOnUiThread {
+                    if (pin != null) {
+                        pinDialog?.dismiss()
+                        pinDialog = AlertDialog.Builder(this@MainActivity)
+                            .setTitle("AirPlay Pairing Code")
+                            .setMessage("AirPlay Code: $pin\n\nEnter this code on your Apple device to connect.")
+                            .setPositiveButton("OK", null)
+                            .show()
+                    } else {
+                        pinDialog?.dismiss()
+                        pinDialog = null
+                    }
+                }
+            }
+        }
     }
 
     private fun toggleServer() {

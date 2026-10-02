@@ -21,53 +21,62 @@ class H264Decoder(private val surface: Surface) {
     var currentFps: Int = 0
         private set
 
-    fun initialize(width: Int = 1920, height: Int = 1080) {
+    private var currentMimeType = MediaFormat.MIMETYPE_VIDEO_AVC
+    private var currentWidth = 1920
+    private var currentHeight = 1080
+
+    fun initialize(width: Int = 1920, height: Int = 1080, mimeType: String = MediaFormat.MIMETYPE_VIDEO_AVC) {
         try {
-            val format = MediaFormat.createVideoFormat(MediaFormat.MIMETYPE_VIDEO_AVC, width, height).apply {
-                // Enable ultra-low latency hardware decoding mode (Android 11+)
+            release()
+            currentWidth = if (width > 0) width else 1920
+            currentHeight = if (height > 0) height else 1080
+            currentMimeType = mimeType
+
+            val format = MediaFormat.createVideoFormat(mimeType, currentWidth, currentHeight).apply {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                     setInteger(MediaFormat.KEY_LOW_LATENCY, 1)
                 }
-                // Request realtime OS priority for video pipeline
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     setInteger(MediaFormat.KEY_PRIORITY, 0)
                 }
-                setInteger(MediaFormat.KEY_MAX_INPUT_SIZE, width * height)
+                setInteger(MediaFormat.KEY_MAX_INPUT_SIZE, currentWidth * currentHeight)
                 setInteger(MediaFormat.KEY_COLOR_FORMAT, android.media.MediaCodecInfo.CodecCapabilities.COLOR_FormatYUV420Flexible)
             }
 
-            codec = MediaCodec.createDecoderByType(MediaFormat.MIMETYPE_VIDEO_AVC).apply {
+            codec = MediaCodec.createDecoderByType(mimeType).apply {
                 configure(format, surface, null, 0)
                 start()
             }
             isConfigured = true
-            Log.i(tag, "Low-latency H.264 AVC Decoder active ($width x $height)")
+            Log.i(tag, "Low-latency Decoder active ($mimeType $currentWidth x $currentHeight)")
         } catch (e: Exception) {
-            Log.e(tag, "Failed to initialize low-latency MediaCodec", e)
+            Log.e(tag, "Failed to initialize low-latency MediaCodec ($mimeType)", e)
         }
     }
 
-    fun decodeNalUnit(nalData: ByteArray, offset: Int, length: Int, ptsUs: Long, isConfig: Boolean = false) {
+    fun decodeNalUnit(nalData: ByteArray, offset: Int, length: Int, ptsUs: Long, isH265: Boolean = false) {
+        val targetMime = if (isH265) MediaFormat.MIMETYPE_VIDEO_HEVC else MediaFormat.MIMETYPE_VIDEO_AVC
+        if (!isConfigured || currentMimeType != targetMime) {
+            initialize(currentWidth, currentHeight, targetMime)
+        }
+
         val decoder = codec ?: return
         if (!isConfigured) return
 
         try {
-            // Non-blocking dequeue (timeout = 0) to avoid socket thread delays
-            val inputBufferIndex = decoder.dequeueInputBuffer(0L)
+            // Use 20ms timeout to avoid dropping keyframes or SPS/PPS
+            val inputBufferIndex = decoder.dequeueInputBuffer(20_000L)
             if (inputBufferIndex >= 0) {
                 val inputBuffer = decoder.getInputBuffer(inputBufferIndex) ?: return
                 inputBuffer.clear()
                 inputBuffer.put(nalData, offset, length)
-
-                val flags = if (isConfig) MediaCodec.BUFFER_FLAG_CODEC_CONFIG else 0
-                decoder.queueInputBuffer(inputBufferIndex, 0, length, ptsUs, flags)
+                decoder.queueInputBuffer(inputBufferIndex, 0, length, ptsUs, 0)
             }
 
             // Drain output frames directly to surface with zero delay
             val bufferInfo = MediaCodec.BufferInfo()
             var outputBufferIndex = decoder.dequeueOutputBuffer(bufferInfo, 0L)
             while (outputBufferIndex >= 0) {
-                // render = true pushes hardware frame directly to the display overlay
                 decoder.releaseOutputBuffer(outputBufferIndex, true)
                 updateFps()
                 outputBufferIndex = decoder.dequeueOutputBuffer(bufferInfo, 0L)
@@ -95,7 +104,7 @@ class H264Decoder(private val surface: Surface) {
             }
             codec = null
             isConfigured = false
-            Log.i(tag, "H.264 Low-Latency Decoder released")
+            Log.i(tag, "Decoder released")
         } catch (e: Exception) {
             Log.e(tag, "Error releasing MediaCodec", e)
         }
