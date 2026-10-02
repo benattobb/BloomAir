@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="bg_dark">#0B0813</color>
+    <color name="bg_deep_violet">#130924</color>
+    <color name="bg_midnight_blue">#0A0E1A</color>
+    <color name="glass_border">#38FFFFFF</color>
+    <color name="glass_border_focused">#A78BFA</color>
+    <color name="glass_card_bg">#251A4080</color>
+    <color name="glass_card_bg_focused">#382463B8</color>
+    <color name="glass_highlight">#1FFFFFFF</color>
+    <color name="gradient_blue_end">#2563EB</color>
+    <color name="gradient_cyan_accent">#06B6D4</color>
+    <color name="gradient_violet_mid">#6366F1</color>
+    <color name="gradient_violet_start">#7C3AED</color>
+    <color name="status_green">#10B981</color>
+    <color name="status_green_glow">#34D399</color>
+    <color name="status_red">#F43F5E</color>
+    <color name="status_yellow">#FBBF24</color>
+    <color name="text_muted">#8B949E</color>
+    <color name="text_primary">#FFFFFF</color>
+    <color name="text_secondary">#DDD6FE</color>
+    <color name="text_tertiary">#93C5FD</color>
+    <string name="app_name">BloomAir</string>
+    <string name="app_tagline">Ultra-Low Latency AirPlay TV</string>
+    <string name="btn_rename">Rename TV</string>
+    <string name="btn_start">Start Receiver</string>
+    <string name="btn_stop">Stop Receiver</string>
+    <string name="btn_switch_video">Switch to Video</string>
+    <string name="device_ready">Ready for Screen Mirroring from iPad &amp; Mac</string>
+    <string name="how_to_connect_title">Quick Connect Guide</string>
+    <string name="lbl_bitrate">Bitrate:</string>
+    <string name="lbl_codec">Hardware Decoder:</string>
+    <string name="lbl_device_name">Broadcast Name:</string>
+    <string name="lbl_fps">Framerate:</string>
+    <string name="lbl_ip_address">TV IP Address:</string>
+    <string name="lbl_port">AirPlay RTSP Port:</string>
+    <string name="lbl_status">Status:</string>
+    <string name="notif_channel_desc">Maintains high-performance background AirPlay receiving</string>
+    <string name="notif_channel_name">BloomAir Receiver</string>
+    <string name="server_running">BloomAir Server is Active</string>
+    <string name="server_stopped">BloomAir Server is Stopped</string>
+    <string name="step_1">1. Connect iPad or Mac to the same Wi-Fi network.</string>
+    <string name="step_2">2. Open Control Center and tap or click \"Screen Mirroring\".</string>
+    <string name="step_3">3. Choose \"BloomAir TV\" to cast in 1080p60 ultra-low latency.</string>
+    <style name="Theme.AirPlayTV" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:windowBackground">@color/bg_dark</item>
+        <item name="colorPrimary">@color/gradient_violet_start</item>
+        <item name="colorSecondary">@color/gradient_blue_end</item>
+        <item name="android:fontFamily">@font/ubuntu</item>
+        <item name="fontFamily">@font/ubuntu</item>
+        <item name="android:statusBarColor">@color/bg_dark</item>
+        <item name="android:navigationBarColor">@color/bg_dark</item>
+    </style>
+</resources>

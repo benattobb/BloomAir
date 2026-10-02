@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <!-- Background Gradient -->
+    <linearGradient id="violetBlueGradient" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#7C3AED" />
+      <stop offset="60%" stop-color="#2563EB" />
+      <stop offset="100%" stop-color="#06B6D4" />
+    </linearGradient>
+
+    <!-- Frosted Glass Gradient -->
+    <linearGradient id="glassGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.45" />
+      <stop offset="40%" stop-color="#FFFFFF" stop-opacity="0.25" />
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0.10" />
+    </linearGradient>
+
+    <!-- Glass Specular Highlight -->
+    <linearGradient id="specularHighlight" x1="50%" y1="0%" x2="50%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.30" />
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0.0" />
+    </linearGradient>
+
+    <!-- Drop Shadow for Frosted Plate -->
+    <filter id="glassShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#000000" flood-opacity="0.35" />
+    </filter>
+  </defs>
+
+  <!-- 1. Outer Gradient Squircle -->
+  <rect x="16" y="16" width="480" height="480" rx="110" ry="110" fill="url(#violetBlueGradient)" />
+
+  <!-- 2. Frosted Glass Plate -->
+  <rect x="56" y="56" width="400" height="400" rx="90" ry="90"
+        fill="url(#glassGradient)"
+        stroke="rgba(255, 255, 255, 0.70)"
+        stroke-width="3"
+        filter="url(#glassShadow)" />
+
+  <!-- Glass Top Specular Glaze -->
+  <path d="M 56 146 A 90 90 0 0 1 146 56 L 366 56 A 90 90 0 0 1 456 146 L 456 220 L 56 220 Z"
+        fill="url(#specularHighlight)" />
+
+  <!-- 3. Centered Main Black Layered Flower Cube -->
+  <g transform="translate(136, 126) scale(1.6)">
+    <!-- Top Diamond Face of Cube -->
+    <path d="M75 18 L132 50 L75 82 L18 50 Z" fill="#000000" />
+
+    <!-- 6-Petal Blossom on Top Face -->
+    <circle cx="75" cy="50" r="4.5" fill="#FFFFFF" />
+    <ellipse cx="75" cy="38" rx="4" ry="7" fill="#FFFFFF" />
+    <ellipse cx="75" cy="62" rx="4" ry="7" fill="#FFFFFF" />
+    <ellipse cx="64.5" cy="44" rx="4" ry="7" transform="rotate(-60 64.5 44)" fill="#FFFFFF" />
+    <ellipse cx="85.5" cy="56" rx="4" ry="7" transform="rotate(-60 85.5 56)" fill="#FFFFFF" />
+    <ellipse cx="64.5" cy="56" rx="4" ry="7" transform="rotate(60 64.5 56)" fill="#FFFFFF" />
+    <ellipse cx="85.5" cy="44" rx="4" ry="7" transform="rotate(60 85.5 44)" fill="#FFFFFF" />
+
+    <!-- Isometric Left & Right Front Faces -->
+    <path d="M18 53 L75 85 L75 130 L18 98 Z" fill="#000000" />
+    <path d="M75 85 L132 53 L132 98 L75 130 Z" fill="#000000" />
+
+    <!-- White Wavy Strata Layers -->
+    <path d="M18 68 Q32 76 46 72 Q60 68 75 76 Q90 68 104 72 Q118 76 132 68 L132 75 Q118 83 104 79 Q90 75 75 83 Q60 75 46 79 Q32 83 18 75 Z" fill="#FFFFFF" />
+    <path d="M18 83 Q32 91 46 87 Q60 83 75 91 Q90 83 104 87 Q118 91 132 83 L132 90 Q118 98 104 94 Q90 90 75 98 Q60 90 46 94 Q32 98 18 90 Z" fill="#FFFFFF" />
+  </g>
+</svg>

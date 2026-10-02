@@ -1,0 +1,195 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.airplay.tv"
+4    android:versionCode="1"
+5    android:versionName="1.0.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="24"
+9        android:targetSdkVersion="35" />
+10
+11    <!-- Android TV requirements -->
+12    <uses-feature
+12-->/Users/benattobb/Documents/BloomAir/app/src/main/AndroidManifest.xml:6:5-8:36
+13        android:name="android.software.leanback"
+13-->/Users/benattobb/Documents/BloomAir/app/src/main/AndroidManifest.xml:7:9-49
+14        android:required="false" />
+14-->/Users/benattobb/Documents/BloomAir/app/src/main/AndroidManifest.xml:8:9-33
+15    <uses-feature
+15-->/Users/benattobb/Documents/BloomAir/app/src/main/AndroidManifest.xml:9:5-11:36
+16        android:name="android.hardware.touchscreen"
+16-->/Users/benattobb/Documents/BloomAir/app/src/main/AndroidManifest.xml:10:9-52
+17        android:required="false" />
+17-->/Users/benattobb/Documents/BloomAir/app/src/main/AndroidManifest.xml:11:9-33
+18    <uses-feature
+18-->/Users/benattobb/Documents/BloomAir/app/src/main/AndroidManifest.xml:12:5-14:36
+19        android:name="android.hardware.microphone"
+19-->/Users/benattobb/Documents/BloomAir/app/src/main/AndroidManifest.xml:13:9-51
+20        android:required="false" />
+20-->/Users/benattobb/Documents/BloomAir/app/src/main/AndroidManifest.xml:14:9-33
+21
+22    <!-- Network and Service permissions -->
+23    <uses-permission android:name="android.permission.INTERNET" />
+23-->/Users/benattobb/Documents/BloomAir/app/src/main/AndroidManifest.xml:17:5-67
+23-->/Users/benattobb/Documents/BloomAir/app/src/main/AndroidManifest.xml:17:22-64
+24    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+24-->/Users/benattobb/Documents/BloomAir/app/src/main/AndroidManifest.xml:18:5-79
+24-->/Users/benattobb/Documents/BloomAir/app/src/main/AndroidManifest.xml:18:22-76
+25    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+25-->/Users/benattobb/Documents/BloomAir/app/src/main/AndroidManifest.xml:19:5-76
+25-->/Users/benattobb/Documents/BloomAir/app/src/main/AndroidManifest.xml:19:22-73
+26    <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
+26-->/Users/benattobb/Documents/BloomAir/app/src/main/AndroidManifest.xml:20:5-86
+26-->/Users/benattobb/Documents/BloomAir/app/src/main/AndroidManifest.xml:20:22-83
+27    <uses-permission android:name="android.permission.WAKE_LOCK" />
+27-->/Users/benattobb/Documents/BloomAir/app/src/main/AndroidManifest.xml:21:5-68
+27-->/Users/benattobb/Documents/BloomAir/app/src/main/AndroidManifest.xml:21:22-65
+28    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+28-->/Users/benattobb/Documents/BloomAir/app/src/main/AndroidManifest.xml:22:5-77
+28-->/Users/benattobb/Documents/BloomAir/app/src/main/AndroidManifest.xml:22:22-74
+29    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
+29-->/Users/benattobb/Documents/BloomAir/app/src/main/AndroidManifest.xml:23:5-92
+29-->/Users/benattobb/Documents/BloomAir/app/src/main/AndroidManifest.xml:23:22-89
+30    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+30-->/Users/benattobb/Documents/BloomAir/app/src/main/AndroidManifest.xml:24:5-77
+30-->/Users/benattobb/Documents/BloomAir/app/src/main/AndroidManifest.xml:24:22-74
+31
+32    <permission
+32-->[androidx.core:core:1.15.0] /Users/benattobb/.gradle/caches/9.7.1/transforms/7ee4e991f44bd98544bbbc818f5a5d93/transformed/core-1.15.0/AndroidManifest.xml:22:5-24:47
+33        android:name="com.airplay.tv.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+33-->[androidx.core:core:1.15.0] /Users/benattobb/.gradle/caches/9.7.1/transforms/7ee4e991f44bd98544bbbc818f5a5d93/transformed/core-1.15.0/AndroidManifest.xml:23:9-81
+34        android:protectionLevel="signature" />
+34-->[androidx.core:core:1.15.0] /Users/benattobb/.gradle/caches/9.7.1/transforms/7ee4e991f44bd98544bbbc818f5a5d93/transformed/core-1.15.0/AndroidManifest.xml:24:9-44
+35
+36    <uses-permission android:name="com.airplay.tv.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+36-->[androidx.core:core:1.15.0] /Users/benattobb/.gradle/caches/9.7.1/transforms/7ee4e991f44bd98544bbbc818f5a5d93/transformed/core-1.15.0/AndroidManifest.xml:26:5-97
+36-->[androidx.core:core:1.15.0] /Users/benattobb/.gradle/caches/9.7.1/transforms/7ee4e991f44bd98544bbbc818f5a5d93/transformed/core-1.15.0/AndroidManifest.xml:26:22-94
+37
+38    <application
+38-->/Users/benattobb/Documents/BloomAir/app/src/main/AndroidManifest.xml:26:5-56:19
+39        android:name="com.airplay.tv.AirPlayApp"
+39-->/Users/benattobb/Documents/BloomAir/app/src/main/AndroidManifest.xml:27:9-35
+40        android:allowBackup="true"
+40-->/Users/benattobb/Documents/BloomAir/app/src/main/AndroidManifest.xml:28:9-35
+41        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+41-->[androidx.core:core:1.15.0] /Users/benattobb/.gradle/caches/9.7.1/transforms/7ee4e991f44bd98544bbbc818f5a5d93/transformed/core-1.15.0/AndroidManifest.xml:28:18-86
+42        android:banner="@drawable/banner"
+42-->/Users/benattobb/Documents/BloomAir/app/src/main/AndroidManifest.xml:31:9-42
+43        android:debuggable="true"
+44        android:extractNativeLibs="false"
+45        android:icon="@mipmap/ic_launcher"
+45-->/Users/benattobb/Documents/BloomAir/app/src/main/AndroidManifest.xml:29:9-43
+46        android:label="@string/app_name"
+46-->/Users/benattobb/Documents/BloomAir/app/src/main/AndroidManifest.xml:30:9-41
+47        android:roundIcon="@mipmap/ic_launcher_round"
+47-->/Users/benattobb/Documents/BloomAir/app/src/main/AndroidManifest.xml:32:9-54
+48        android:supportsRtl="true"
+48-->/Users/benattobb/Documents/BloomAir/app/src/main/AndroidManifest.xml:33:9-35
+49        android:theme="@style/Theme.AirPlayTV" >
+49-->/Users/benattobb/Documents/BloomAir/app/src/main/AndroidManifest.xml:34:9-47
+50        <activity
+50-->/Users/benattobb/Documents/BloomAir/app/src/main/AndroidManifest.xml:37:9-48:20
+51            android:name="com.airplay.tv.ui.MainActivity"
+51-->/Users/benattobb/Documents/BloomAir/app/src/main/AndroidManifest.xml:38:13-44
+52            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
+52-->/Users/benattobb/Documents/BloomAir/app/src/main/AndroidManifest.xml:40:13-87
+53            android:exported="true"
+53-->/Users/benattobb/Documents/BloomAir/app/src/main/AndroidManifest.xml:39:13-36
+54            android:screenOrientation="landscape"
+54-->/Users/benattobb/Documents/BloomAir/app/src/main/AndroidManifest.xml:41:13-50
+55            android:theme="@style/Theme.AirPlayTV" >
+55-->/Users/benattobb/Documents/BloomAir/app/src/main/AndroidManifest.xml:42:13-51
+56            <intent-filter>
+56-->/Users/benattobb/Documents/BloomAir/app/src/main/AndroidManifest.xml:43:13-47:29
+57                <action android:name="android.intent.action.MAIN" />
+57-->/Users/benattobb/Documents/BloomAir/app/src/main/AndroidManifest.xml:44:17-69
+57-->/Users/benattobb/Documents/BloomAir/app/src/main/AndroidManifest.xml:44:25-66
+58
+59                <category android:name="android.intent.category.LAUNCHER" />
+59-->/Users/benattobb/Documents/BloomAir/app/src/main/AndroidManifest.xml:45:17-77
+59-->/Users/benattobb/Documents/BloomAir/app/src/main/AndroidManifest.xml:45:27-74
+60                <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
+60-->/Users/benattobb/Documents/BloomAir/app/src/main/AndroidManifest.xml:46:17-86
+60-->/Users/benattobb/Documents/BloomAir/app/src/main/AndroidManifest.xml:46:27-83
+61            </intent-filter>
+62        </activity>
+63
+64        <service
+64-->/Users/benattobb/Documents/BloomAir/app/src/main/AndroidManifest.xml:50:9-54:61
+65            android:name="com.airplay.tv.AirPlayServerService"
+65-->/Users/benattobb/Documents/BloomAir/app/src/main/AndroidManifest.xml:51:13-49
+66            android:enabled="true"
+66-->/Users/benattobb/Documents/BloomAir/app/src/main/AndroidManifest.xml:52:13-35
+67            android:exported="false"
+67-->/Users/benattobb/Documents/BloomAir/app/src/main/AndroidManifest.xml:53:13-37
+68            android:foregroundServiceType="mediaPlayback" />
+68-->/Users/benattobb/Documents/BloomAir/app/src/main/AndroidManifest.xml:54:13-58
+69
+70        <provider
+70-->[androidx.emoji2:emoji2:1.3.0] /Users/benattobb/.gradle/caches/9.7.1/transforms/c567ecb7cdf9851f39c729c082fe8298/transformed/emoji2-1.3.0/AndroidManifest.xml:24:9-32:20
+71            android:name="androidx.startup.InitializationProvider"
+71-->[androidx.emoji2:emoji2:1.3.0] /Users/benattobb/.gradle/caches/9.7.1/transforms/c567ecb7cdf9851f39c729c082fe8298/transformed/emoji2-1.3.0/AndroidManifest.xml:25:13-67
+72            android:authorities="com.airplay.tv.androidx-startup"
+72-->[androidx.emoji2:emoji2:1.3.0] /Users/benattobb/.gradle/caches/9.7.1/transforms/c567ecb7cdf9851f39c729c082fe8298/transformed/emoji2-1.3.0/AndroidManifest.xml:26:13-68
+73            android:exported="false" >
+73-->[androidx.emoji2:emoji2:1.3.0] /Users/benattobb/.gradle/caches/9.7.1/transforms/c567ecb7cdf9851f39c729c082fe8298/transformed/emoji2-1.3.0/AndroidManifest.xml:27:13-37
+74            <meta-data
+74-->[androidx.emoji2:emoji2:1.3.0] /Users/benattobb/.gradle/caches/9.7.1/transforms/c567ecb7cdf9851f39c729c082fe8298/transformed/emoji2-1.3.0/AndroidManifest.xml:29:13-31:52
+75                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+75-->[androidx.emoji2:emoji2:1.3.0] /Users/benattobb/.gradle/caches/9.7.1/transforms/c567ecb7cdf9851f39c729c082fe8298/transformed/emoji2-1.3.0/AndroidManifest.xml:30:17-75
+76                android:value="androidx.startup" />
+76-->[androidx.emoji2:emoji2:1.3.0] /Users/benattobb/.gradle/caches/9.7.1/transforms/c567ecb7cdf9851f39c729c082fe8298/transformed/emoji2-1.3.0/AndroidManifest.xml:31:17-49
+77            <meta-data
+77-->[androidx.lifecycle:lifecycle-process:2.8.7] /Users/benattobb/.gradle/caches/9.7.1/transforms/0d61440d783add0eb36ef1d786a5814f/transformed/lifecycle-process-2.8.7/AndroidManifest.xml:29:13-31:52
+78                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+78-->[androidx.lifecycle:lifecycle-process:2.8.7] /Users/benattobb/.gradle/caches/9.7.1/transforms/0d61440d783add0eb36ef1d786a5814f/transformed/lifecycle-process-2.8.7/AndroidManifest.xml:30:17-78
+79                android:value="androidx.startup" />
+79-->[androidx.lifecycle:lifecycle-process:2.8.7] /Users/benattobb/.gradle/caches/9.7.1/transforms/0d61440d783add0eb36ef1d786a5814f/transformed/lifecycle-process-2.8.7/AndroidManifest.xml:31:17-49
+80            <meta-data
+80-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/benattobb/.gradle/caches/9.7.1/transforms/169a3ef021d6ecd18d21385992c5a910/transformed/profileinstaller-1.3.1/AndroidManifest.xml:29:13-31:52
+81                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
+81-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/benattobb/.gradle/caches/9.7.1/transforms/169a3ef021d6ecd18d21385992c5a910/transformed/profileinstaller-1.3.1/AndroidManifest.xml:30:17-85
+82                android:value="androidx.startup" />
+82-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/benattobb/.gradle/caches/9.7.1/transforms/169a3ef021d6ecd18d21385992c5a910/transformed/profileinstaller-1.3.1/AndroidManifest.xml:31:17-49
+83        </provider>
+84
+85        <receiver
+85-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/benattobb/.gradle/caches/9.7.1/transforms/169a3ef021d6ecd18d21385992c5a910/transformed/profileinstaller-1.3.1/AndroidManifest.xml:34:9-52:20
+86            android:name="androidx.profileinstaller.ProfileInstallReceiver"
+86-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/benattobb/.gradle/caches/9.7.1/transforms/169a3ef021d6ecd18d21385992c5a910/transformed/profileinstaller-1.3.1/AndroidManifest.xml:35:13-76
+87            android:directBootAware="false"
+87-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/benattobb/.gradle/caches/9.7.1/transforms/169a3ef021d6ecd18d21385992c5a910/transformed/profileinstaller-1.3.1/AndroidManifest.xml:36:13-44
+88            android:enabled="true"
+88-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/benattobb/.gradle/caches/9.7.1/transforms/169a3ef021d6ecd18d21385992c5a910/transformed/profileinstaller-1.3.1/AndroidManifest.xml:37:13-35
+89            android:exported="true"
+89-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/benattobb/.gradle/caches/9.7.1/transforms/169a3ef021d6ecd18d21385992c5a910/transformed/profileinstaller-1.3.1/AndroidManifest.xml:38:13-36
+90            android:permission="android.permission.DUMP" >
+90-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/benattobb/.gradle/caches/9.7.1/transforms/169a3ef021d6ecd18d21385992c5a910/transformed/profileinstaller-1.3.1/AndroidManifest.xml:39:13-57
+91            <intent-filter>
+91-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/benattobb/.gradle/caches/9.7.1/transforms/169a3ef021d6ecd18d21385992c5a910/transformed/profileinstaller-1.3.1/AndroidManifest.xml:40:13-42:29
+92                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
+92-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/benattobb/.gradle/caches/9.7.1/transforms/169a3ef021d6ecd18d21385992c5a910/transformed/profileinstaller-1.3.1/AndroidManifest.xml:41:17-91
+92-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/benattobb/.gradle/caches/9.7.1/transforms/169a3ef021d6ecd18d21385992c5a910/transformed/profileinstaller-1.3.1/AndroidManifest.xml:41:25-88
+93            </intent-filter>
+94            <intent-filter>
+94-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/benattobb/.gradle/caches/9.7.1/transforms/169a3ef021d6ecd18d21385992c5a910/transformed/profileinstaller-1.3.1/AndroidManifest.xml:43:13-45:29
+95                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
+95-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/benattobb/.gradle/caches/9.7.1/transforms/169a3ef021d6ecd18d21385992c5a910/transformed/profileinstaller-1.3.1/AndroidManifest.xml:44:17-85
+95-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/benattobb/.gradle/caches/9.7.1/transforms/169a3ef021d6ecd18d21385992c5a910/transformed/profileinstaller-1.3.1/AndroidManifest.xml:44:25-82
+96            </intent-filter>
+97            <intent-filter>
+97-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/benattobb/.gradle/caches/9.7.1/transforms/169a3ef021d6ecd18d21385992c5a910/transformed/profileinstaller-1.3.1/AndroidManifest.xml:46:13-48:29
+98                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
+98-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/benattobb/.gradle/caches/9.7.1/transforms/169a3ef021d6ecd18d21385992c5a910/transformed/profileinstaller-1.3.1/AndroidManifest.xml:47:17-88
+98-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/benattobb/.gradle/caches/9.7.1/transforms/169a3ef021d6ecd18d21385992c5a910/transformed/profileinstaller-1.3.1/AndroidManifest.xml:47:25-85
+99            </intent-filter>
+100            <intent-filter>
+100-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/benattobb/.gradle/caches/9.7.1/transforms/169a3ef021d6ecd18d21385992c5a910/transformed/profileinstaller-1.3.1/AndroidManifest.xml:49:13-51:29
+101                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
+101-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/benattobb/.gradle/caches/9.7.1/transforms/169a3ef021d6ecd18d21385992c5a910/transformed/profileinstaller-1.3.1/AndroidManifest.xml:50:17-95
+101-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/benattobb/.gradle/caches/9.7.1/transforms/169a3ef021d6ecd18d21385992c5a910/transformed/profileinstaller-1.3.1/AndroidManifest.xml:50:25-92
+102            </intent-filter>
+103        </receiver>
+104    </application>
+105
+106</manifest>

@@ -1,0 +1,94 @@
+[
+    {
+        "merged": "com.airplay.tv.app-debug-37:/mipmap-hdpi_ic_launcher.png.flat",
+        "source": "com.airplay.tv.app-main-39:/mipmap-hdpi/ic_launcher.png"
+    },
+    {
+        "merged": "com.airplay.tv.app-debug-37:/drawable_banner.png.flat",
+        "source": "com.airplay.tv.app-main-39:/drawable/banner.png"
+    },
+    {
+        "merged": "com.airplay.tv.app-debug-37:/layout_activity_main.xml.flat",
+        "source": "com.airplay.tv.app-main-39:/layout/activity_main.xml"
+    },
+    {
+        "merged": "com.airplay.tv.app-debug-37:/mipmap-mdpi_ic_launcher_round.png.flat",
+        "source": "com.airplay.tv.app-main-39:/mipmap-mdpi/ic_launcher_round.png"
+    },
+    {
+        "merged": "com.airplay.tv.app-debug-37:/font_ubuntu_medium.ttf.flat",
+        "source": "com.airplay.tv.app-main-39:/font/ubuntu_medium.ttf"
+    },
+    {
+        "merged": "com.airplay.tv.app-debug-37:/mipmap-mdpi_ic_launcher.png.flat",
+        "source": "com.airplay.tv.app-main-39:/mipmap-mdpi/ic_launcher.png"
+    },
+    {
+        "merged": "com.airplay.tv.app-debug-37:/mipmap-xhdpi_ic_launcher.png.flat",
+        "source": "com.airplay.tv.app-main-39:/mipmap-xhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "com.airplay.tv.app-debug-37:/font_ubuntu_regular.ttf.flat",
+        "source": "com.airplay.tv.app-main-39:/font/ubuntu_regular.ttf"
+    },
+    {
+        "merged": "com.airplay.tv.app-debug-37:/font_ubuntu.xml.flat",
+        "source": "com.airplay.tv.app-main-39:/font/ubuntu.xml"
+    },
+    {
+        "merged": "com.airplay.tv.app-debug-37:/drawable-xhdpi_banner.png.flat",
+        "source": "com.airplay.tv.app-main-39:/drawable-xhdpi/banner.png"
+    },
+    {
+        "merged": "com.airplay.tv.app-debug-37:/mipmap-xxhdpi_ic_launcher_round.png.flat",
+        "source": "com.airplay.tv.app-main-39:/mipmap-xxhdpi/ic_launcher_round.png"
+    },
+    {
+        "merged": "com.airplay.tv.app-debug-37:/drawable_glass_button_selector.xml.flat",
+        "source": "com.airplay.tv.app-main-39:/drawable/glass_button_selector.xml"
+    },
+    {
+        "merged": "com.airplay.tv.app-debug-37:/drawable_glass_card.xml.flat",
+        "source": "com.airplay.tv.app-main-39:/drawable/glass_card.xml"
+    },
+    {
+        "merged": "com.airplay.tv.app-debug-37:/mipmap-hdpi_ic_launcher_round.png.flat",
+        "source": "com.airplay.tv.app-main-39:/mipmap-hdpi/ic_launcher_round.png"
+    },
+    {
+        "merged": "com.airplay.tv.app-debug-37:/drawable_ic_airplay.xml.flat",
+        "source": "com.airplay.tv.app-main-39:/drawable/ic_airplay.xml"
+    },
+    {
+        "merged": "com.airplay.tv.app-debug-37:/font_ubuntu_bold.ttf.flat",
+        "source": "com.airplay.tv.app-main-39:/font/ubuntu_bold.ttf"
+    },
+    {
+        "merged": "com.airplay.tv.app-debug-37:/mipmap-xxxhdpi_ic_launcher_round.png.flat",
+        "source": "com.airplay.tv.app-main-39:/mipmap-xxxhdpi/ic_launcher_round.png"
+    },
+    {
+        "merged": "com.airplay.tv.app-debug-37:/drawable_ic_launcher_512.png.flat",
+        "source": "com.airplay.tv.app-main-39:/drawable/ic_launcher_512.png"
+    },
+    {
+        "merged": "com.airplay.tv.app-debug-37:/mipmap-xxhdpi_ic_launcher.png.flat",
+        "source": "com.airplay.tv.app-main-39:/mipmap-xxhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "com.airplay.tv.app-debug-37:/drawable_glass_badge.xml.flat",
+        "source": "com.airplay.tv.app-main-39:/drawable/glass_badge.xml"
+    },
+    {
+        "merged": "com.airplay.tv.app-debug-37:/mipmap-xxxhdpi_ic_launcher.png.flat",
+        "source": "com.airplay.tv.app-main-39:/mipmap-xxxhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "com.airplay.tv.app-debug-37:/drawable_ic_logo_black.png.flat",
+        "source": "com.airplay.tv.app-main-39:/drawable/ic_logo_black.png"
+    },
+    {
+        "merged": "com.airplay.tv.app-debug-37:/mipmap-xhdpi_ic_launcher_round.png.flat",
+        "source": "com.airplay.tv.app-main-39:/mipmap-xhdpi/ic_launcher_round.png"
+    }
+]

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Backgrounds -->
+    <color name="bg_dark">#0B0813</color>
+    <color name="bg_midnight_blue">#0A0E1A</color>
+    <color name="bg_deep_violet">#130924</color>
+
+    <!-- Frosted Glass Colors -->
+    <color name="glass_card_bg">#251A4080</color>
+    <color name="glass_card_bg_focused">#382463B8</color>
+    <color name="glass_border">#38FFFFFF</color>
+    <color name="glass_border_focused">#A78BFA</color>
+    <color name="glass_highlight">#1FFFFFFF</color>
+
+    <!-- Violet & Blue Gradient Accents -->
+    <color name="gradient_violet_start">#7C3AED</color>
+    <color name="gradient_violet_mid">#6366F1</color>
+    <color name="gradient_blue_end">#2563EB</color>
+    <color name="gradient_cyan_accent">#06B6D4</color>
+
+    <!-- Status Indicators -->
+    <color name="status_green">#10B981</color>
+    <color name="status_green_glow">#34D399</color>
+    <color name="status_yellow">#FBBF24</color>
+    <color name="status_red">#F43F5E</color>
+
+    <!-- Typography -->
+    <color name="text_primary">#FFFFFF</color>
+    <color name="text_secondary">#DDD6FE</color>
+    <color name="text_tertiary">#93C5FD</color>
+    <color name="text_muted">#8B949E</color>
+</resources>
