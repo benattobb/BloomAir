@@ -101,10 +101,10 @@ class AirPlayServerService : Service(), RaopCallbackHandler, LogListener {
         NativeBridge.nativeSetCodecs(nativeHandle, alac = true, aac = true)
         NativeBridge.nativeSetH265Enabled(nativeHandle, true)
 
-        // Configure and start native low-latency Oboe audio engine
+        // Configure and start native low-latency Oboe audio engine with 60ms jitter cushion
         NativeBridge.nativeServerAudioConfigure(
             nativeHandle,
-            cushionMs = 0,
+            cushionMs = 60,
             percentilePct = 95,
             oboeBufferFrames = 0,
             forceSwAlac = false,
@@ -192,6 +192,7 @@ class AirPlayServerService : Service(), RaopCallbackHandler, LogListener {
     override fun onAudioFormat(ct: Int, spf: Int, usingScreen: Boolean) {
         Log.i(tag, "onAudioFormat: ct=$ct, spf=$spf, usingScreen=$usingScreen")
         if (nativeHandle != 0L) {
+            NativeBridge.nativeServerAudioStart(nativeHandle)
             NativeBridge.nativeServerAudioFormat(nativeHandle, ct, spf)
         }
     }
@@ -207,6 +208,17 @@ class AirPlayServerService : Service(), RaopCallbackHandler, LogListener {
 
     override fun onVolumeChange(volume: Float) {
         Log.d(tag, "onVolumeChange: $volume")
+        try {
+            val audioManager = getSystemService(Context.AUDIO_SERVICE) as? AudioManager ?: return
+            val maxVol = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC)
+            val linearVol = if (volume <= -144.0f) 0.0f
+                            else if (volume <= 0.0f && volume >= -30.0f) Math.pow(10.0, volume / 30.0).toFloat()
+                            else volume.coerceIn(0.0f, 1.0f)
+            val targetVol = (linearVol * maxVol).toInt().coerceIn(0, maxVol)
+            audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, targetVol, 0)
+        } catch (e: Exception) {
+            Log.w(tag, "Failed to adjust volume: ${e.message}")
+        }
     }
 
     override fun onClientVolume(): Float = 1.0f

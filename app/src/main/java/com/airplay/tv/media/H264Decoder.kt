@@ -72,13 +72,15 @@ class H264Decoder(private val surface: Surface) {
         if (!isConfigured) return
 
         try {
-            // Use 20ms timeout to avoid dropping keyframes or SPS/PPS
-            val inputBufferIndex = decoder.dequeueInputBuffer(20_000L)
+            // Use 0L (non-blocking) to avoid holding the C++ native network thread
+            val inputBufferIndex = decoder.dequeueInputBuffer(0L)
             if (inputBufferIndex >= 0) {
-                val inputBuffer = decoder.getInputBuffer(inputBufferIndex) ?: return
-                inputBuffer.clear()
-                inputBuffer.put(nalData, offset, length)
-                decoder.queueInputBuffer(inputBufferIndex, 0, length, ptsUs, 0)
+                val inputBuffer = decoder.getInputBuffer(inputBufferIndex)
+                if (inputBuffer != null) {
+                    inputBuffer.clear()
+                    inputBuffer.put(nalData, offset, length)
+                    decoder.queueInputBuffer(inputBufferIndex, 0, length, ptsUs, 0)
+                }
             }
 
             // Drain output frames directly to surface with zero delay

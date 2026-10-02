@@ -115,7 +115,7 @@ class MainActivity : AppCompatActivity(), SurfaceHolder.Callback {
                             binding.dotStatus.backgroundTintList = getColorStateList(R.color.accent_sage)
                             binding.btnToggleServer.text = "Stop Receiver"
                             binding.dashboardOverlay.visibility = View.VISIBLE
-                            binding.videoSurfaceView.visibility = View.GONE
+                            binding.videoSurfaceView.visibility = View.VISIBLE
                         }
                         AirPlayServerService.ServerState.STREAMING -> {
                             binding.txtStatusBadge.text = "STREAMING ACTIVE"
@@ -132,7 +132,7 @@ class MainActivity : AppCompatActivity(), SurfaceHolder.Callback {
                             binding.dotStatus.backgroundTintList = getColorStateList(R.color.status_red)
                             binding.btnToggleServer.text = "Start Receiver"
                             binding.dashboardOverlay.visibility = View.VISIBLE
-                            binding.videoSurfaceView.visibility = View.GONE
+                            binding.videoSurfaceView.visibility = View.VISIBLE
                         }
                     }
                 }
