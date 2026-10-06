@@ -74,9 +74,7 @@ Once BloomAir is running on your Android TV:
 
 ### BloomAir in use
 
-![BloomAir receiver ready to connect, with a sender selecting BloomAir TV and video playing on the television](artwork/marketing/bloomair-watch-on-tv.png)
-
-![BloomAir’s simple Screen Mirroring selection flow](artwork/marketing/bloomair-easy-connect.png)
+![BloomAir social banner: open BloomAir on Android TV, select it in Screen Mirroring, and watch on the big screen](artwork/marketing/bloomair-social-preview.png)
 
 The artwork illustrates the simple flow: open BloomAir on the TV, choose **BloomAir TV** from Screen Mirroring on an iPhone, iPad, or Mac, and watch on the television.
 

@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#f7f7f2" />
+  <rect x="24" y="24" width="1152" height="582" rx="32" fill="#fbfaf7" stroke="#e9e5da" stroke-width="2" />
+
+  <image href="../../app/src/main/res/drawable/ic_bloomair_512.png" x="82" y="66" width="76" height="76" />
+  <text x="180" y="108" font-family="Georgia, 'Times New Roman', serif" font-size="46" font-weight="700" fill="#181a1c">BloomAir</text>
+  <text x="183" y="136" font-family="Arial, sans-serif" font-size="12" font-weight="700" letter-spacing="3" fill="#708874">AIRPLAY RECEIVER · ANDROID TV</text>
+
+  <g transform="translate(850 78)">
+    <rect width="268" height="50" rx="16" fill="#ffffff" stroke="#e8e5dc" stroke-width="1.5" />
+    <circle cx="27" cy="25" r="10" fill="#708874" />
+    <path d="m22 25 4 4 7-8" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
+    <text x="48" y="31" font-family="Arial, sans-serif" font-size="15" font-weight="700" letter-spacing="1.5" fill="#4c5f4f">FREE · OPEN SOURCE</text>
+  </g>
+
+  <text x="84" y="236" font-family="Georgia, 'Times New Roman', serif" font-size="48" font-weight="700" fill="#181a1c">Your screen, on the big screen.</text>
+  <text x="86" y="278" font-family="Arial, sans-serif" font-size="22" fill="#74746f">Mirror from iPhone, iPad or Mac to your Android TV.</text>
+
+  <g font-family="Arial, sans-serif">
+    <rect x="82" y="326" width="328" height="158" rx="22" fill="#ffffff" stroke="#e9e5da" stroke-width="1.5" />
+    <circle cx="124" cy="370" r="22" fill="#e5ede6" />
+    <text x="124" y="376" text-anchor="middle" font-size="15" font-weight="700" fill="#526d57">01</text>
+    <text x="112" y="424" font-size="20" font-weight="700" fill="#242624">Open BloomAir</text>
+    <text x="112" y="453" font-size="16" fill="#74746f">on your Android TV</text>
+
+    <path d="M420 405h25m-8-8 8 8-8 8" fill="none" stroke="#9aab9b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+
+    <rect x="448" y="326" width="328" height="158" rx="22" fill="#ffffff" stroke="#e9e5da" stroke-width="1.5" />
+    <circle cx="490" cy="370" r="22" fill="#e5ede6" />
+    <text x="490" y="376" text-anchor="middle" font-size="15" font-weight="700" fill="#526d57">02</text>
+    <text x="478" y="424" font-size="20" font-weight="700" fill="#242624">Open Screen Mirroring</text>
+    <text x="478" y="453" font-size="16" fill="#74746f">on your Apple device</text>
+
+    <path d="M786 405h25m-8-8 8 8-8 8" fill="none" stroke="#9aab9b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+
+    <rect x="814" y="326" width="304" height="158" rx="22" fill="#eef3ee" stroke="#dfe7df" stroke-width="1.5" />
+    <circle cx="856" cy="370" r="22" fill="#dce8de" />
+    <text x="856" y="376" text-anchor="middle" font-size="15" font-weight="700" fill="#526d57">03</text>
+    <text x="844" y="424" font-size="20" font-weight="700" fill="#242624">Choose BloomAir TV</text>
+    <text x="844" y="453" font-size="16" fill="#74746f">and watch on the big screen</text>
+  </g>
+
+  <text x="84" y="553" font-family="Arial, sans-serif" font-size="13" font-weight="700" letter-spacing="2.5" fill="#898982">MADE FOR ANDROID TV · FREE AND OPEN SOURCE</text>
+  <text x="1116" y="553" text-anchor="end" font-family="Arial, sans-serif" font-size="15" font-weight="600" fill="#5d7b61">github.com/benattobb/BloomAir</text>
+</svg>

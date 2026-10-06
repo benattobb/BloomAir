@@ -12,7 +12,7 @@ Built and tested on a real Android TV. App icon design by @koboyo.
 
 Source: https://github.com/benattobb/BloomAir
 
-Image: `artwork/marketing/bloomair-easy-connect.png`
+Image: `artwork/marketing/bloomair-social-preview.png`
 
 ---
 
@@ -26,4 +26,4 @@ The project includes the Android app, setup instructions, device-testing notes, 
 
 Project source: https://github.com/benattobb/BloomAir
 
-Image: `artwork/marketing/bloomair-watch-on-tv.png`
+Image: `artwork/marketing/bloomair-social-preview.png`

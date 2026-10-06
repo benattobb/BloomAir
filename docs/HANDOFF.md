@@ -13,4 +13,4 @@
   - Untracked `scripts/__pycache__/` and `*.pyc`.
   - Updated `.gitignore`.
 - Social posts: Final drafts in `docs/SOCIAL_POSTS.md`.
-- Marketing images: `artwork/marketing/bloomair-easy-connect.png` (X) and `artwork/marketing/bloomair-watch-on-tv.png` (LinkedIn).
+- Marketing image: `artwork/marketing/bloomair-social-preview.png` (1200×630; shared X and LinkedIn banner; editable source: `bloomair-social-preview.svg`).
