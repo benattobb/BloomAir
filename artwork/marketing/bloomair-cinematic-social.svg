@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="shade" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#101312" stop-opacity=".98" />
+      <stop offset=".40" stop-color="#101312" stop-opacity=".87" />
+      <stop offset=".61" stop-color="#101312" stop-opacity=".42" />
+      <stop offset=".78" stop-color="#101312" stop-opacity="0" />
+    </linearGradient>
+    <linearGradient id="lowerShade" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0" stop-color="#101312" stop-opacity=".54" />
+      <stop offset="1" stop-color="#101312" stop-opacity="0" />
+    </linearGradient>
+    <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="2" stdDeviation="5" flood-color="#000000" flood-opacity=".3" />
+    </filter>
+  </defs>
+
+  <image href="bloomair-cinematic-background.png" x="0" y="0" width="1200" height="630" preserveAspectRatio="xMidYMid slice" />
+  <rect width="1200" height="630" fill="url(#shade)" />
+  <rect y="390" width="700" height="240" fill="url(#lowerShade)" />
+
+  <g filter="url(#softShadow)">
+    <image href="../../app/src/main/res/drawable/ic_bloomair_512.png" x="68" y="63" width="54" height="54" />
+    <text x="138" y="96" font-family="Arial, sans-serif" font-size="30" font-weight="700" letter-spacing=".2" fill="#f7f6f1">BloomAir</text>
+    <text x="140" y="118" font-family="Arial, sans-serif" font-size="10" font-weight="700" letter-spacing="2.5" fill="#bdcbbf">AIRPLAY FOR ANDROID TV</text>
+
+    <text x="68" y="247" font-family="Georgia, 'Times New Roman', serif" font-size="53" font-weight="400" fill="#fbfaf6">From your device</text>
+    <text x="68" y="309" font-family="Georgia, 'Times New Roman', serif" font-size="53" font-weight="400" fill="#fbfaf6">to the big screen.</text>
+
+    <text x="70" y="365" font-family="Arial, sans-serif" font-size="18" fill="#dedfd9">Open BloomAir on your TV.</text>
+    <text x="70" y="393" font-family="Arial, sans-serif" font-size="18" fill="#dedfd9">Choose BloomAir TV. Settle in and watch.</text>
+
+    <path d="M72 438h40" stroke="#b9cbbb" stroke-width="2" stroke-linecap="round" />
+    <circle cx="72" cy="438" r="4" fill="#c9d8cc" />
+    <circle cx="112" cy="438" r="4" fill="#c9d8cc" />
+    <text x="70" y="474" font-family="Arial, sans-serif" font-size="13" font-weight="700" letter-spacing="1.1" fill="#d8e1d9">iPHONE  ·  iPAD  ·  MAC</text>
+  </g>
+
+  <text x="70" y="574" font-family="Arial, sans-serif" font-size="12" font-weight="700" letter-spacing="1.8" fill="#c8cec7">FREE  ·  OPEN SOURCE</text>
+  <text x="1130" y="574" text-anchor="end" font-family="Arial, sans-serif" font-size="13" font-weight="600" fill="#edf0eb">github.com/benattobb/BloomAir</text>
+</svg>
