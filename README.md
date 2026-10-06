@@ -83,3 +83,14 @@ The artwork illustrates the simple flow: open BloomAir on the TV, choose **Bloom
 ## Device Testing and Troubleshooting
 
 See [docs/DEVICE_TESTING.md](docs/DEVICE_TESTING.md) for build, wireless installation, AirPlay discovery checks, and connection diagnostics.
+
+---
+
+## 📜 License & Attribution
+
+BloomAir is licensed under the [GNU General Public License v3.0](LICENSE) (GPL-3.0).
+
+### Upstream Credits & Acknowledgments
+- Based upon and inspired by [android-airplay-server](https://github.com/jqssun/android-airplay-server) by [jqssun](https://github.com/jqssun), licensed under GPL-3.0.
+- Core audio and low-latency pipeline utilizes [Google Oboe](https://github.com/google/oboe).
+

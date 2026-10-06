@@ -1,6 +1,6 @@
 # BloomAir launch post drafts
 
-These drafts describe the behavior verified on a real Android TV. Replace `REPOSITORY_URL` with the public repository URL before publishing.
+These drafts describe the behavior verified on a real Android TV.
 
 ## X
 
@@ -10,7 +10,7 @@ BloomAir is an open-source AirPlay receiver for Android TV. Open it on the TV, c
 
 Built and tested on a real Android TV.
 
-Source: REPOSITORY_URL
+Source: https://github.com/benattobb/BloomAir
 
 Image: `artwork/marketing/bloomair-easy-connect.png`
 
@@ -22,6 +22,7 @@ The goal is to make screen mirroring simple: open BloomAir on the TV, select “
 
 The project includes the Android app, setup instructions, device-testing notes, and deployment scripts.
 
-Project source: REPOSITORY_URL
+Project source: https://github.com/benattobb/BloomAir
 
 Image: `artwork/marketing/bloomair-watch-on-tv.png`
+

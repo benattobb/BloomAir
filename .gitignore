@@ -9,4 +9,5 @@
 .externalNativeBuild
 .cxx
 *.apk
-!AirPlayServer.apk
+__pycache__/
+*.pyc
