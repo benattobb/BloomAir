@@ -75,7 +75,7 @@ Once BloomAir is running on your Android TV:
 
 The artwork illustrates the simple flow: open BloomAir on the TV, choose **BloomAir TV** from Screen Mirroring on an iPhone, iPad, or Mac, and watch on the television.
 
-* **Vector App Icon**: [`artwork/BloomAir_Frosted_Icon.svg`](artwork/BloomAir_Frosted_Icon.svg)
+* **Vector App Icon**: [`artwork/BloomAir_Frosted_Icon.svg`](artwork/BloomAir_Frosted_Icon.svg) — App icon design created by [koboyo](https://github.com/koboyo)
 * **Vector TV Banner**: [`artwork/BloomAir_TV_Banner.svg`](artwork/BloomAir_TV_Banner.svg)
 * **Typography**: [`app/src/main/res/font/ubuntu.xml`](app/src/main/res/font/ubuntu.xml)
 * **Moving Gradient Background**: [`app/src/main/java/com/airplay/tv/ui/MovingGradientView.kt`](app/src/main/java/com/airplay/tv/ui/MovingGradientView.kt)
@@ -92,5 +92,7 @@ BloomAir is licensed under the [GNU General Public License v3.0](LICENSE) (GPL-3
 
 ### Upstream Credits & Acknowledgments
 - Based upon and inspired by [android-airplay-server](https://github.com/jqssun/android-airplay-server) by [jqssun](https://github.com/jqssun), licensed under GPL-3.0.
+- App icon artwork designed and credited to [koboyo](https://github.com/koboyo).
 - Core audio and low-latency pipeline utilizes [Google Oboe](https://github.com/google/oboe).
+
 
