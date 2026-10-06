@@ -1,4 +1,9 @@
-# BloomAir (iPhone, iPad & Mac to Android TV)
+<p align="center">
+  <img src="artwork/BloomAir_Frosted_Icon.svg" alt="BloomAir App Icon" width="128" height="128" />
+</p>
+
+<h1 align="center">BloomAir</h1>
+<p align="center"><strong>Ultra-Low Latency AirPlay Receiver for Android TV (iPhone, iPad &amp; Mac)</strong></p>
 
 An open-source Android TV application that lets you use the built-in Screen Mirroring controls on an iPhone, iPad, or Mac to connect to an Android TV. BloomAir provides Apple **AirPlay screen mirroring**, **video streaming**, and **audio playback**. Actual latency depends on the TV hardware and Wi-Fi network.
 
@@ -74,6 +79,14 @@ Once BloomAir is running on your Android TV:
 ![BloomAir’s simple Screen Mirroring selection flow](artwork/marketing/bloomair-easy-connect.png)
 
 The artwork illustrates the simple flow: open BloomAir on the TV, choose **BloomAir TV** from Screen Mirroring on an iPhone, iPad, or Mac, and watch on the television.
+
+### App Icon & TV Banner
+
+<p align="center">
+  <img src="artwork/BloomAir_Frosted_Icon.svg" alt="BloomAir App Icon" width="160" />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="artwork/BloomAir_TV_Banner.svg" alt="BloomAir TV Banner" width="320" />
+</p>
 
 * **Vector App Icon**: [`artwork/BloomAir_Frosted_Icon.svg`](artwork/BloomAir_Frosted_Icon.svg) — App icon design created by [koboyo](https://github.com/koboyo)
 * **Vector TV Banner**: [`artwork/BloomAir_TV_Banner.svg`](artwork/BloomAir_TV_Banner.svg)
