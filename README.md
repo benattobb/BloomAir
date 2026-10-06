@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="artwork/BloomAir_Frosted_Icon.svg" alt="BloomAir App Icon" width="128" height="128" />
+  <img src="app/src/main/res/drawable/ic_bloomair_512.png" alt="BloomAir Android app icon" width="128" height="128" />
 </p>
 
 <h1 align="center">BloomAir</h1>
@@ -83,13 +83,13 @@ The artwork illustrates the simple flow: open BloomAir on the TV, choose **Bloom
 ### App Icon & TV Banner
 
 <p align="center">
-  <img src="artwork/BloomAir_Frosted_Icon.svg" alt="BloomAir App Icon" width="160" />
+  <img src="app/src/main/res/drawable/ic_bloomair_512.png" alt="BloomAir Android app icon" width="160" />
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-  <img src="artwork/BloomAir_TV_Banner.svg" alt="BloomAir TV Banner" width="320" />
+  <img src="app/src/main/res/drawable/banner_bloomair.png" alt="BloomAir Android TV banner" width="320" />
 </p>
 
-* **Vector App Icon**: [`artwork/BloomAir_Frosted_Icon.svg`](artwork/BloomAir_Frosted_Icon.svg) — App icon design created by [koboyo](https://github.com/koboyo)
-* **Vector TV Banner**: [`artwork/BloomAir_TV_Banner.svg`](artwork/BloomAir_TV_Banner.svg)
+* **App Icon**: [`app/src/main/res/drawable/ic_bloomair_512.png`](app/src/main/res/drawable/ic_bloomair_512.png) — icon artwork created by [koboyo](https://github.com/koboyo); the adaptive launcher variants are generated from the same mark.
+* **Android TV Banner**: [`app/src/main/res/drawable/banner_bloomair.png`](app/src/main/res/drawable/banner_bloomair.png)
 * **Typography**: [`app/src/main/res/font/ubuntu.xml`](app/src/main/res/font/ubuntu.xml)
 * **Moving Gradient Background**: [`app/src/main/java/com/airplay/tv/ui/MovingGradientView.kt`](app/src/main/java/com/airplay/tv/ui/MovingGradientView.kt)
 
@@ -107,5 +107,3 @@ BloomAir is licensed under the [GNU General Public License v3.0](LICENSE) (GPL-3
 - Based upon and inspired by [android-airplay-server](https://github.com/jqssun/android-airplay-server) by [jqssun](https://github.com/jqssun), licensed under GPL-3.0.
 - App icon artwork designed and credited to [koboyo](https://github.com/koboyo).
 - Core audio and low-latency pipeline utilizes [Google Oboe](https://github.com/google/oboe).
-
-
