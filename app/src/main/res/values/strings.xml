@@ -3,9 +3,9 @@
     <string name="app_tagline">Ultra-Low Latency AirPlay TV</string>
     <string name="server_running">BloomAir Server is Active</string>
     <string name="server_stopped">BloomAir Server is Stopped</string>
-    <string name="device_ready">Ready for Screen Mirroring from iPad &amp; Mac</string>
+    <string name="device_ready">Ready for Screen Mirroring from iPhone, iPad &amp; Mac</string>
     <string name="how_to_connect_title">Quick Connect Guide</string>
-    <string name="step_1">1. Connect iPad or Mac to the same Wi-Fi network.</string>
+    <string name="step_1">1. Connect iPhone, iPad, or Mac to the same Wi-Fi network.</string>
     <string name="step_2">2. Open Control Center and tap or click \"Screen Mirroring\".</string>
     <string name="step_3">3. Choose \"BloomAir TV\" to cast in 1080p60 ultra-low latency.</string>
     <string name="btn_start">Start Receiver</string>

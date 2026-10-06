@@ -1,6 +1,6 @@
-# BloomAir (iPad & Mac to Android TV)
+# BloomAir (iPhone, iPad & Mac to Android TV)
 
-An open-source Android TV application that lets you use the built-in Screen Mirroring controls on a Mac or iPad to connect to an Android TV. BloomAir provides Apple **AirPlay screen mirroring**, **video streaming**, and **audio playback**. Actual latency depends on the TV hardware and Wi-Fi network.
+An open-source Android TV application that lets you use the built-in Screen Mirroring controls on an iPhone, iPad, or Mac to connect to an Android TV. BloomAir provides Apple **AirPlay screen mirroring**, **video streaming**, and **audio playback**. Actual latency depends on the TV hardware and Wi-Fi network.
 
 ---
 
@@ -47,13 +47,13 @@ This repository contains a full Android TV application ready for Android Studio:
 
 ---
 
-## 📱 How to Connect from your iPad or Mac
+## 📱 How to Connect from your iPhone, iPad, or Mac
 
 Once BloomAir is running on your Android TV:
 
-### From your iPad:
-1. Ensure your iPad is connected to the **same Wi-Fi network** as your Android TV.
-2. Swipe down from the top-right corner to open **Control Center**.
+### From your iPhone or iPad:
+1. Ensure your iPhone or iPad is connected to the **same Wi-Fi network** as your Android TV.
+2. Swipe down from the top-right corner (or swipe up from the bottom on older iPhone models) to open **Control Center**.
 3. Tap the **Screen Mirroring** icon.
 4. Select **"BloomAir TV"**.
 
@@ -73,7 +73,7 @@ Once BloomAir is running on your Android TV:
 
 ![BloomAir’s simple Screen Mirroring selection flow](artwork/marketing/bloomair-easy-connect.png)
 
-The artwork illustrates the simple flow: open BloomAir on the TV, choose **BloomAir TV** from Screen Mirroring on a Mac or iPad, and watch on the television.
+The artwork illustrates the simple flow: open BloomAir on the TV, choose **BloomAir TV** from Screen Mirroring on an iPhone, iPad, or Mac, and watch on the television.
 
 * **Vector App Icon**: [`artwork/BloomAir_Frosted_Icon.svg`](artwork/BloomAir_Frosted_Icon.svg)
 * **Vector TV Banner**: [`artwork/BloomAir_TV_Banner.svg`](artwork/BloomAir_TV_Banner.svg)

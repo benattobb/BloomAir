@@ -67,5 +67,5 @@ if [ -f "$APK_PATH" ]; then
     echo "[+] Installation complete!"
     echo "[*] Launching AirPlay TV on your television..."
     $ADB_BIN -s "${TV_IP}:${CONNECT_PORT}" shell monkey -p com.airplay.tv -c android.intent.category.LEANBACK_LAUNCHER 1
-    echo "[+] AirPlay receiver is now running on your TV! Ready to connect from iPad or Mac."
+    echo "[+] AirPlay receiver is now running on your TV! Ready to connect from iPhone, iPad, or Mac."
 fi

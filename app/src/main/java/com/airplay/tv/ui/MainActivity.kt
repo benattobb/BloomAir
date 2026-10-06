@@ -91,7 +91,7 @@ class MainActivity : AppCompatActivity(), SurfaceHolder.Callback {
     }
 
     private fun updateInstructionText(tvName: String) {
-        binding.txtInstruction.text = "Open Control Center on your iPad or Mac, select Screen Mirroring, and choose $tvName."
+        binding.txtInstruction.text = "Open Control Center on your iPhone, iPad, or Mac, select Screen Mirroring, and choose $tvName."
     }
 
     private fun startAndBindService() {
@@ -246,7 +246,7 @@ class MainActivity : AppCompatActivity(), SurfaceHolder.Callback {
 
         AlertDialog.Builder(this, R.style.Theme_AirPlayTV)
             .setTitle("Change TV AirPlay Name")
-            .setMessage("This name appears on your iPad and Mac in Screen Mirroring.")
+            .setMessage("This name appears on your iPhone, iPad, and Mac in Screen Mirroring.")
             .setView(input)
             .setPositiveButton("Save") { _, _ ->
                 val newName = input.text.toString().trim()

@@ -140,7 +140,7 @@
                 android:layout_marginTop="12dp"
                 android:fontFamily="@font/ubuntu_regular"
                 android:lineSpacingExtra="4dp"
-                android:text="Open Control Center on your iPad or Mac, select Screen Mirroring, and choose BloomAir TV."
+                android:text="Open Control Center on your iPhone, iPad, or Mac, select Screen Mirroring, and choose BloomAir TV."
                 android:textColor="@color/text_secondary"
                 android:textSize="15sp" />
 

@@ -48,7 +48,7 @@ if [ -n "$APK_PATH" ]; then
     echo "[+] Installation successful!"
     echo "[*] Launching AirPlay TV on your television..."
     $ADB_BIN -s "${TV_IP}:${PORT}" shell monkey -p com.airplay.tv -c android.intent.category.LEANBACK_LAUNCHER 1
-    echo "[+] App launched! Your Android TV is now ready to receive AirPlay from your iPad and Mac."
+    echo "[+] App launched! Your Android TV is now ready to receive AirPlay from your iPhone, iPad, and Mac."
 else
     echo "[!] No compiled APK found in standard build directories."
     echo "[*] Run './gradlew assembleDebug' or execute './scripts/fetch_open_source_apk.sh' to download a ready-to-use APK."
