@@ -10,6 +10,7 @@ import android.os.IBinder
 import android.view.KeyEvent
 import android.view.SurfaceHolder
 import android.view.View
+import android.view.WindowManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -48,11 +49,6 @@ class MainActivity : AppCompatActivity(), SurfaceHolder.Callback {
 
             observeServiceState()
 
-            // Auto-start the server on TV launch
-            if (airPlayService?.serverState?.value == AirPlayServerService.ServerState.STOPPED) {
-                val tvName = prefs.getString("tv_name", "BloomAir TV") ?: "BloomAir TV"
-                airPlayService?.startServer(tvName)
-            }
         }
 
         override fun onServiceDisconnected(name: ComponentName?) {
@@ -99,15 +95,28 @@ class MainActivity : AppCompatActivity(), SurfaceHolder.Callback {
     }
 
     private fun startAndBindService() {
+        val tvName = prefs.getString("tv_name", "BloomAir TV") ?: "BloomAir TV"
         val intent = Intent(this, AirPlayServerService::class.java)
+            .putExtra(AirPlayServerService.EXTRA_DEVICE_NAME, tvName)
         ContextCompat.startForegroundService(this, intent)
         bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE)
+    }
+
+    private fun requestServerStart(tvName: String) {
+        val intent = Intent(this, AirPlayServerService::class.java)
+            .putExtra(AirPlayServerService.EXTRA_DEVICE_NAME, tvName)
+        ContextCompat.startForegroundService(this, intent)
     }
 
     private fun observeServiceState() {
         lifecycleScope.launch {
             airPlayService?.serverState?.collectLatest { state ->
                 runOnUiThread {
+                    if (state == AirPlayServerService.ServerState.STOPPED) {
+                        window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+                    } else {
+                        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+                    }
                     when (state) {
                         AirPlayServerService.ServerState.LISTENING -> {
                             binding.txtStatusBadge.text = "READY TO CONNECT"
@@ -181,7 +190,7 @@ class MainActivity : AppCompatActivity(), SurfaceHolder.Callback {
         val service = airPlayService ?: return
         if (service.serverState.value == AirPlayServerService.ServerState.STOPPED) {
             val tvName = prefs.getString("tv_name", "BloomAir TV") ?: "BloomAir TV"
-            service.startServer(tvName)
+            requestServerStart(tvName)
         } else {
             service.stopServer()
         }
@@ -246,7 +255,7 @@ class MainActivity : AppCompatActivity(), SurfaceHolder.Callback {
                     binding.txtDeviceName.text = newName
                     updateInstructionText(newName)
                     airPlayService?.stopServer()
-                    airPlayService?.startServer(newName)
+                    requestServerStart(newName)
                     Toast.makeText(this, "TV name updated to $newName", Toast.LENGTH_SHORT).show()
                 }
             }

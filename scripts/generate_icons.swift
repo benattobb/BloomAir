@@ -2,8 +2,15 @@ import Foundation
 import AppKit
 import CoreGraphics
 
-let inputPath = "/Users/benattobb/.gemini/antigravity/brain/62540650-7aee-4f9b-b2e8-2f68f0de6485/.user_uploaded/media_1790975577170.png"
-let baseDir = "/Users/benattobb/Documents/AirPlayTV/app/src/main/res"
+guard CommandLine.arguments.count == 2 else {
+    print("Usage: swift generate_icons.swift <source-icon.png>")
+    exit(2)
+}
+let inputPath = CommandLine.arguments[1]
+let repoRoot = URL(fileURLWithPath: #filePath)
+    .deletingLastPathComponent()
+    .deletingLastPathComponent()
+let baseDir = repoRoot.appendingPathComponent("app/src/main/res").path
 
 guard let inputImage = NSImage(contentsOfFile: inputPath) else {
     print("Error: Could not load input image at \(inputPath)")

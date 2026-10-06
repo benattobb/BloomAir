@@ -98,6 +98,10 @@ class H264Decoder(private val surface: Surface) {
         ptsUs: Long,
         isH265: Boolean = false
     ) {
+        if (offset < 0 || length <= 0 || offset > nalData.size - length) {
+            Log.w(tag, "Ignoring invalid NAL unit range: offset=$offset length=$length size=${nalData.size}")
+            return
+        }
         val targetMime = if (isH265) MediaFormat.MIMETYPE_VIDEO_HEVC
                          else        MediaFormat.MIMETYPE_VIDEO_AVC
         // Copy immediately — native buffer may be reused after we return
@@ -158,21 +162,36 @@ class H264Decoder(private val surface: Surface) {
     private fun decodeSync(data: ByteArray, ptsUs: Long) {
         val c = codec ?: return
         try {
-            // 5 ms — enough time for the chip to release a buffer under typical load.
-            // Lower values (0-2 ms) risk returning -1 more often, stalling the pipeline.
-            val inIdx = c.dequeueInputBuffer(5_000L)
+            // This runs on the dedicated codec thread, so wait for decoder backpressure
+            // instead of throwing away a predictive access unit. Losing one encoded
+            // packet corrupts subsequent reference frames until the next IDR.
+            val deadline = android.os.SystemClock.elapsedRealtime() + 250L
+            var inIdx = c.dequeueInputBuffer(10_000L)
+            while (inIdx < 0 && android.os.SystemClock.elapsedRealtime() < deadline) {
+                drainOutput(c)
+                inIdx = c.dequeueInputBuffer(10_000L)
+            }
             if (inIdx >= 0) {
                 val buf = c.getInputBuffer(inIdx)
                 if (buf != null) {
                     buf.clear()
-                    val len = minOf(data.size, buf.remaining())
-                    buf.put(data, 0, len)
-                    c.queueInputBuffer(inIdx, 0, len, ptsUs, 0)
+                    if (data.size > buf.remaining()) {
+                        c.queueInputBuffer(inIdx, 0, 0, ptsUs, 0)
+                        Log.w(tag, "Dropping oversized NAL unit: ${data.size} bytes")
+                    } else {
+                        buf.put(data)
+                        c.queueInputBuffer(inIdx, 0, data.size, ptsUs, 0)
+                    }
                 } else {
                     c.queueInputBuffer(inIdx, 0, 0, ptsUs, 0)
                 }
             } else {
-                Log.w(tag, "No input buffer in 5 ms — NAL dropped")
+                // A quarter-second stall means the codec is no longer making progress.
+                // Reset it rather than feeding later predictive frames into a stale
+                // reference chain. The sender's next keyframe restores synchronization.
+                Log.e(tag, "Decoder input stalled for 250 ms; reinitialising codec")
+                initSync(currentWidth, currentHeight, currentMimeType)
+                return
             }
             // Immediate drain pass — catches any frame that finished during dequeueInputBuffer
             drainOutput(c)

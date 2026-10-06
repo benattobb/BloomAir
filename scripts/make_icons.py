@@ -209,8 +209,12 @@ def render_tv_banner(width, height, icon_buf, icon_size):
     return buf
 
 if __name__ == "__main__":
-    input_icon = "/Users/benattobb/.gemini/antigravity/brain/62540650-7aee-4f9b-b2e8-2f68f0de6485/.user_uploaded/media_1790975577170.png"
-    res_dir = "/Users/benattobb/Documents/BloomAir/app/src/main/res"
+    import sys
+
+    if len(sys.argv) != 2:
+        raise SystemExit(f"Usage: {sys.argv[0]} <source-icon.png>")
+    input_icon = sys.argv[1]
+    res_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "app", "src", "main", "res")
 
     print("[*] Decoding uploaded icon...")
     src_w, src_h, src_pixels = decode_png(input_icon)

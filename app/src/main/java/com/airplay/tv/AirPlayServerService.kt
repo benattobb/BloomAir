@@ -12,6 +12,7 @@ import android.os.Binder
 import android.os.Build
 import android.os.IBinder
 import android.os.PowerManager
+import android.provider.Settings
 import android.util.Log
 import android.view.Surface
 import androidx.core.app.NotificationCompat
@@ -25,6 +26,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import java.net.NetworkInterface
+import java.security.MessageDigest
 
 class AirPlayServerService : Service(), RaopCallbackHandler, LogListener {
 
@@ -64,14 +66,21 @@ class AirPlayServerService : Service(), RaopCallbackHandler, LogListener {
 
     override fun onBind(intent: Intent?): IBinder = binder
 
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        val name = intent?.getStringExtra(EXTRA_DEVICE_NAME) ?: deviceName
+        startServer(name)
+        return START_NOT_STICKY
+    }
+
     override fun onCreate() {
         super.onCreate()
-        acquirePowerAndWifiLocks()
     }
 
     fun startServer(tvName: String = "BloomAir TV") {
         if (nativeHandle != 0L) return
         deviceName = tvName
+
+        acquirePowerAndWifiLocks()
 
         startForeground(
             AirPlayApp.NOTIFICATION_ID,
@@ -94,12 +103,17 @@ class AirPlayServerService : Service(), RaopCallbackHandler, LogListener {
         if (nativeHandle == 0L) {
             Log.e(tag, "NativeBridge.nativeInit failed")
             _serverState.value = ServerState.STOPPED
+            nsdManager?.release()
+            nsdManager = null
+            stopForeground(STOP_FOREGROUND_REMOVE)
+            releasePowerAndWifiLocks()
+            stopSelf()
             return
         }
 
         NativeBridge.nativeSetAudioEnabled(nativeHandle, true)
         NativeBridge.nativeSetCodecs(nativeHandle, alac = true, aac = true)
-        NativeBridge.nativeSetH265Enabled(nativeHandle, true)
+        NativeBridge.nativeSetH265Enabled(nativeHandle, false)
 
         // Configure and start native low-latency Oboe audio engine with 60ms jitter cushion
         NativeBridge.nativeServerAudioConfigure(
@@ -115,14 +129,29 @@ class AirPlayServerService : Service(), RaopCallbackHandler, LogListener {
         NativeBridge.nativeServerAudioStart(nativeHandle)
 
         val port = NativeBridge.nativeStart(nativeHandle, 7000)
+        if (port <= 0) {
+            Log.e(tag, "Native AirPlay server failed to start (port=$port)")
+            stopServer()
+            return
+        }
         Log.i(tag, "AirPlay native cryptographic server started on port $port")
 
         val raopTxt = NativeBridge.nativeGetRaopTxtRecords(nativeHandle) ?: emptyMap()
-        val airplayTxt = NativeBridge.nativeGetAirplayTxtRecords(nativeHandle) ?: emptyMap()
+        val airplayTxt = (NativeBridge.nativeGetAirplayTxtRecords(nativeHandle) ?: emptyMap()).toMutableMap().apply {
+            // The native helper's template has a fixed example deviceid. Keep it aligned
+            // with this receiver's unique RAOP identity or Apple senders may target a stale device.
+            put("deviceid", hwAddr.joinToString(":") { "%02X".format(it) })
+        }
         val raopServiceName = NativeBridge.nativeGetRaopServiceName(nativeHandle) ?: (getMacHex(hwAddr) + "@" + deviceName)
 
         nsdManager?.registerRaop(raopServiceName, port, raopTxt)
         nsdManager?.registerAirplay(deviceName, port, airplayTxt)
+
+        // A stopped receiver releases its codec. Recreate it when the activity still owns
+        // a valid surface and the receiver is started again without recreating the activity.
+        currentSurface?.takeIf { it.isValid }?.let { surface ->
+            videoDecoder = H264Decoder(surface).apply { initialize(1920, 1080) }
+        }
 
         _serverState.value = ServerState.LISTENING
         Log.i(tag, "BloomAir Service active for: $deviceName")
@@ -132,13 +161,20 @@ class AirPlayServerService : Service(), RaopCallbackHandler, LogListener {
         try {
             val interfaces = NetworkInterface.getNetworkInterfaces()
             for (nif in interfaces) {
-                if (nif.name.startsWith("wlan") || nif.name.startsWith("eth")) {
+                if (nif.isUp && (nif.name.startsWith("wlan") || nif.name.startsWith("eth"))) {
                     val mac = nif.hardwareAddress
-                    if (mac != null && mac.size == 6) return mac
+                    if (mac != null && mac.size == 6 && !mac.all { it == 0.toByte() } &&
+                        !(mac[0] == 0x02.toByte() && mac.drop(1).all { it == 0.toByte() })) return mac
                 }
             }
         } catch (_: Exception) {}
-        return byteArrayOf(0x4A.toByte(), 0x2B.toByte(), 0x6C.toByte(), 0x8D.toByte(), 0x1E.toByte(), 0x0F.toByte())
+
+        // Android restricts hardware-address access on many TV builds. Use a stable,
+        // per-device locally administered address instead of a shared hardcoded identity.
+        val androidId = Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID)
+            ?: Build.FINGERPRINT
+        val digest = MessageDigest.getInstance("SHA-256").digest(androidId.toByteArray(Charsets.UTF_8))
+        return digest.copyOfRange(0, 6).also { it[0] = ((it[0].toInt() and 0xFC) or 0x02).toByte() }
     }
 
     private fun getMacHex(bytes: ByteArray): String =
@@ -176,14 +212,16 @@ class AirPlayServerService : Service(), RaopCallbackHandler, LogListener {
             nativeHandle = 0L
         }
 
-        videoDecoder?.release()
+        val decoder = videoDecoder
         videoDecoder = null
+        decoder?.release()
 
         _serverState.value = ServerState.STOPPED
         _connectedDeviceName.value = null
         _pinCode.value = null
 
         stopForeground(STOP_FOREGROUND_REMOVE)
+        releasePowerAndWifiLocks()
         stopSelf()
         Log.i(tag, "BloomAir Service stopped")
     }
@@ -340,5 +378,9 @@ class AirPlayServerService : Service(), RaopCallbackHandler, LogListener {
         stopServer()
         releasePowerAndWifiLocks()
         super.onDestroy()
+    }
+
+    companion object {
+        const val EXTRA_DEVICE_NAME = "com.airplay.tv.extra.DEVICE_NAME"
     }
 }
